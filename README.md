@@ -1,26 +1,58 @@
 # Movie Maniac
 
-2 solutions-
 
-1st Solution -
+A Command-Line Python Application to display information about movies on your PC from the CLI !
 
-* Give it a directory path where all your movies/documentaries resides - /Users/chaitanyagupta/Movies/movies/UnWatched
 
-* It will fetch the information for each movie from IMDB.
+### Using [pip]()
 
-* Sort all your movies/documentaries by their genres and further sort them according to their imdb ratings.
+pip install moviemon
 
-2nd Solution -
+### Get the latest build from the Source
 
-* Create a GUI
+* Clone the repo git clone https://github.com/iCHAIT/movie-maniac
+* 
 
-* Provide sorting option for all your movies/documentaries by their -
+
+### Options
+
+-h, --help          show this help message and exit
+-R README, --readme README
+                    Get the raw version of the repository readme file from repo link URL
+
+
+
+
+
+
+
+
+
+
+### Usage 
+
+Display the list of a user's repositories from the username/URL, along with the number of stargazers
+
+
+
+
+
+
+
+
+
+
+METHODODLGY -
+
+* Provide switches option for all your movies by their -
         * IMDB ratings
-        * runtime
+        * roten tomatoes rating
+        * runtime/length
         * release year (recent movie appears on top)
         * genre
         * director
         * actors
+        * Awards
 
 
 

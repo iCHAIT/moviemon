@@ -3,7 +3,8 @@
 
 A Command-Line Python Application to display information about movies on your PC from the CLI !
 
-
+Scans folders for movies, and fetches their data from the OMDB API and displays it in CLI.
+ 
 ### Using [pip]()
 
 pip install moviemon
@@ -22,27 +23,11 @@ pip install moviemon
 
 
 
-
-
-
-
-
-
-
 ### Usage 
 
-Display the list of a user's repositories from the username/URL, along with the number of stargazers
+### Demos
 
-
-
-
-
-
-
-
-
-
-METHODODLGY -
+### METHODODLGY -
 
 * Provide switches option for all your movies by their -
         * IMDB ratings
@@ -55,5 +40,7 @@ METHODODLGY -
         * Awards
 
 
+### TODO
 
-
+- [ ] Use PrettyTable to tabulate the output in CLI
+- [ ] Start off with switches

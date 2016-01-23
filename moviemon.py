@@ -1,7 +1,6 @@
 import os
 import requests
 import json
-# import re
 
 from guessit import guess_file_info
 
@@ -22,17 +21,11 @@ EXT = (".3g2 .3gp .3gp2 .3gpp .60d .ajp .asf .asx .avchd .avi .bik .bix"
 EXT = tuple(EXT.split())
 
 
-# def camelcase_to_underscore(string):
-#     """Convert string from ``CamelCase`` to ``under_score``."""
-#     return (re.sub('((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))', r'_\1', string)
-#             .lower())
-
-
 def scan_dir(path):
     for root, dirs, files in os.walk(path):
             for name in files:
                 path = os.path.join(root, name)
-                if os.path.getsize(path) > (25*1024*1024):    # split this into separate func ?
+                if os.path.getsize(path) > (25*1024*1024):  # Validation for file size
                     ext = os.path.splitext(name)[1]
                     if ext in EXT:
                         get_movie_info(name)
@@ -41,8 +34,8 @@ def scan_dir(path):
 def get_movie_info(name):
     """Find movie information"""
     movie_info = guess_file_info(name)
-    if movie_info['type'] == "movie":    # what if I have TV shows in that folder?
-        if movie_info.has_key('year'):
+    if movie_info['type'] == "movie":  # what if I have TV shows in that folder?
+        if 'year' in movie_info:
             omdb(movie_info['title'], movie_info['year'])
         else:
             omdb(movie_info['title'], None)
@@ -64,10 +57,9 @@ def omdb(title, year):
 
     source = json.loads(data.text)
 
-    if source['Response'] == 'False':
+    if source['Response'] == 'False':  # Movie not found :(
         source = None
 
-    dir_json = path + ".json"
     with open(dir_json, "a") as out:
         json.dump(source, out, indent=2)
         out.write("\n")
@@ -75,4 +67,10 @@ def omdb(title, year):
 
 if __name__ == '__main__':
     for path in PATHS:
+        dir_json = path + ".json"
+        if os.path.exists(dir_json):
+            try:
+                os.remove(dir_json)
+            except OSError:
+                pass
         scan_dir(path)

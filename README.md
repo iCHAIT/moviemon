@@ -44,3 +44,10 @@ pip install moviemon
 
 - [ ] Use PrettyTable to tabulate the output in CLI
 - [ ] Start off with switches
+
+
+### Known Issues
+
+* Valid JSON not getting written into file, currently using hacks by explicitly writing `[`, `]` and truncating a comma at last.
+
+* If length of movie title is > 10 then table gets fucked up.

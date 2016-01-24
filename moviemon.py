@@ -1,12 +1,13 @@
 import os
 import requests
 import json
-
 from guessit import guess_file_info
 
 from urllib import urlencode
 
 from config import PATHS
+
+from prettytable import PrettyTable
 
 OMDB_URL = 'http://www.omdbapi.com/?'
 
@@ -23,18 +24,20 @@ EXT = tuple(EXT.split())
 
 def scan_dir(path):
     for root, dirs, files in os.walk(path):
-            for name in files:
-                path = os.path.join(root, name)
-                if os.path.getsize(path) > (25*1024*1024):  # Validation for file size
-                    ext = os.path.splitext(name)[1]
-                    if ext in EXT:
-                        get_movie_info(name)
+        for name in files:
+            path = os.path.join(root, name)
+            # Validation for file size
+            if os.path.getsize(path) > (25*1024*1024):
+                ext = os.path.splitext(name)[1]
+                if ext in EXT:
+                    get_movie_info(name)
 
 
 def get_movie_info(name):
     """Find movie information"""
     movie_info = guess_file_info(name)
-    if movie_info['type'] == "movie":  # what if I have TV shows in that folder?
+    # what if I have TV shows in that folder?
+    if movie_info['type'] == "movie":
         if 'year' in movie_info:
             omdb(movie_info['title'], movie_info['year'])
         else:
@@ -57,20 +60,40 @@ def omdb(title, year):
 
     source = json.loads(data.text)
 
-    if source['Response'] == 'False':  # Movie not found :(
-        source = None
-
-    with open(dir_json, "a") as out:
-        json.dump(source, out, indent=2)
-        out.write("\n")
+    if source['Response'] == 'True':  # Movie not found :(
+        with open(dir_json, "a") as out:
+            json.dump(source, out, indent=2)
+            # `,` is a hack for validating JSON, ask duffer
+            out.write(",\n")
 
 
 if __name__ == '__main__':
     for path in PATHS:
         dir_json = path + ".json"
-        if os.path.exists(dir_json):
-            try:
-                os.remove(dir_json)
-            except OSError:
-                pass
-        scan_dir(path)
+        # if os.path.exists(dir_json):
+        #     try:
+        #         os.remove(dir_json)
+        #     except OSError:
+        #         pass
+        # with open(dir_json, "w") as out:   # Hack for validating JSON, ask duffer
+        #     out.write("[")
+        # scan_dir(path)
+        # with open(dir_json, "a") as out:   # Hack for validating JSON, ask duffer
+        #     out.write("]")
+
+    with open(dir_json) as inp:
+        data = json.load(inp)
+
+    x = PrettyTable(["Title", "Genre", "imdbRating", "Runtime", "tomatoRating", "Year"])
+    x.align["Title"] = "l"
+    x.align["Genre"] = "l"
+
+    for item in data:
+        if len(item["Title"].split()) <= 10:  # So that the table doesn't get fucked
+            x.add_row([item["Title"], item["Genre"],item["imdbRating"], item["Runtime"],item["tomatoRating"], item["Year"]])
+
+    print x
+
+'''
+Note - Learn about json.dump() json.dumps() json.load() json.loads()
+'''

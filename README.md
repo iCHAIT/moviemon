@@ -1,4 +1,4 @@
-# Movie Maniac
+# moviemon
 
 A Command-Line Python Application to display information about movies on your PC from the CLI.
 
@@ -6,7 +6,7 @@ Scans folders for movies, and fetches their data from the OMDB API and displays 
 
 (Bada wala GIF)
 
-### Using [pip]()
+### Using [pip](https://pypi.python.org/pypi/pip/)
 
 `$ pip install moviemon`
 
@@ -52,63 +52,63 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
   -T, --tomato-rev      Sort acc. to Tomato Rotten rating.(inc)
 ```
 
-### Example -
+### Examples -
 
-Display basic info about all your movies.
+* Display basic info about all your movies.
 
 `$ py moviemon.py -m`
 
 [**DEMO**]()
 
-Display all movies sorted according to their IMDB ratings.
+* Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings.
 
 `$ py moviemon -i`
 
 [**DEMO**]()
 
-Display all movies sorted according to their Tomato Rotten ratings.
+* Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings.
 
 `$ py moviemon -t`
 
 [**DEMO**]()
 
-Display all movies with their Genres.
+* Display all movies with their Genres.
 
 `$ py moviemon -g`
 
 [**DEMO**]()
 
-Display all movies with the awards they have recieved.
+* Display all movies with the awards they have recieved.
 
 `$ py moviemon -a`
 
 [**DEMO**]()
 
-Display all movies with their cast.
+* Display all movies with their cast.
 
 `$ py moviemon -c`
 
 [**DEMO**]()
 
-Display all movies with their director(s).
+* Display all movies with their director(s).
 
 `$ py moviemon -d`
 
 [**DEMO**]()
 
-Display all movies with their release date.
+* Display all movies with their release date.
 
 `$ py moviemon -y`
 
 [**DEMO**]()
 
-Display all movies sorted according to their IMDB ratings(increasing).
+* Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings(inc).
 
 `$ py moviemon -I`
 
 [**DEMO**]()
 
-Display all movies sorted according to their Tomato Rotten ratings(increasing).
+* Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings(inc).
 
 `$ py moviemon -T`
 
@@ -122,7 +122,7 @@ Display all movies sorted according to their Tomato Rotten ratings(increasing).
 
 ### Known Issues
 
-* Should I store JSON in a fil, or should we fetch the data on the fly?
+* Should I store JSON in a file, or should we fetch the data on the fly?
 
 * Valid JSON not getting written into file, currently using hacks by explicitly writing `[`, `]` and truncating a comma at last.
 
@@ -132,10 +132,13 @@ Display all movies sorted according to their Tomato Rotten ratings(increasing).
 
 * What about movies that gets guessed incorrectly, eg Oceans Eleven resulting in response="False"
 
+* In the table some results have attribute as N/A, should it be removed from the table?
+
 
 ### Contribute
 
-Want to report bugs, make a feature requests, improve something feel free to open issue or send a pull request.
+Want to report bugs, suggest a new feature, improve something?
+Feel free to open issues or send a pull request.
 
 
 ### License

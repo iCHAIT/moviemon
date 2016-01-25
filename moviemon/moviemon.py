@@ -6,8 +6,8 @@ Usage:
   moviemon.py [-m | -i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
 
 Options:
-  -h --help     Show this screen.
-  --version     Show version.
+  -h, --help     Show this screen.
+  -v, --version     Show version.
   -m                    Display basic info about all movies.
   -i, --imdb            Sort acc. to IMDB rating.(dec)
   -t, --tomato          Sort acc. to Tomato Rotten rating.(dec)

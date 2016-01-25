@@ -1,19 +1,24 @@
 """moviemon.
 
 Usage:
+  moviemon.py -h
+  moviemon.py --version
+  moviemon.py [-m | -i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
+
+Options:
   -h --help     Show this screen.
   --version     Show version.
-  -m
-  -i            Sort acc. to IMDB rating.(dec)
-  -iv           Sort acc. to IMDB rating.(inc)
-  -t            Sort acc. to Tomato Rotten rating.(dec)
-  -tv           Sort acc. to Tomato Rotten rating.(inc)
-  -g            Show moviename & its genre.
-  -a            Show moviename & awards recieved.
-  -r            Show moviename & its runtime.
-  -c            Show moviename & its cast.
-  -d            Show moviename & director name.
-  -y            Show moviename & its release year.
+  -m                    Display basic info about all movies.
+  -i, --imdb            Sort acc. to IMDB rating.(dec)
+  -t, --tomato          Sort acc. to Tomato Rotten rating.(dec)
+  -g, --genre           Show moviename & its genre.
+  -a, --awards          Show moviename & awards recieved.
+  -c, --cast            Show moviename & its cast.
+  -d, --director        Show moviename & director name.
+  -y, --year            Show moviename & its release year.
+  -r, --runtime         Show moviename & its runtime.
+  -I, --imdb-rev        Sort acc. to IMDB rating.(inc)
+  -T, --tomato-rev      Sort acc. to Tomato Rotten rating.(inc)
 
 """
 
@@ -45,6 +50,33 @@ EXT = (".3g2 .3gp .3gp2 .3gpp .60d .ajp .asf .asx .avchd .avi .bik .bix"
 EXT = tuple(EXT.split())
 
 
+def main(docopt_args):
+    if docopt_args["-m"]:
+        print basic_table.get_string(sortby="Title")
+    elif docopt_args["--imdb"]:
+        print imdb_table.get_string(sortby="Imdb Rating", reversesort=True)
+    elif docopt_args["--tomato"]:
+        print tomato_table.get_string(sortby="Tomato Rating", reversesort=True)
+    elif docopt_args["--genre"]:
+        print genre_table.get_string(sortby="Title")
+    elif docopt_args["--awards"]:
+        print awards_table.get_string(sortby="Title")
+    elif docopt_args["--cast"]:
+        print cast_table.get_string(sortby="Title")
+    elif docopt_args["--director"]:
+        print direct_table.get_string(sortby="Title")
+    elif docopt_args["--year"]:
+        print release_table.get_string(sortby="Title")
+    elif docopt_args["--runtime"]:
+        print runtime_table.get_string(sortby="Title")
+    elif docopt_args["--imdb-rev"]:
+        print imdb_table.get_string(sortby="Imdb Rating")
+    elif docopt_args["--tomato-rev"]:
+        print tomato_table.get_string(sortby="Tomato Rating")
+    else:
+        print "Use -h for help"
+
+
 def scan_dir(path):
     for root, dirs, files in os.walk(path):
         for name in files:
@@ -59,7 +91,6 @@ def scan_dir(path):
 def get_movie_info(name):
     """Find movie information"""
     movie_info = guess_file_info(name)
-    # what if I have TV shows in that folder?
     if movie_info['type'] == "movie":
         if 'year' in movie_info:
             omdb(movie_info['title'], movie_info['year'])
@@ -107,51 +138,52 @@ if __name__ == '__main__':
     with open(dir_json) as inp:
         data = json.load(inp)
 
-    # snippet for basic table
+    # snippet for -m
     basic_table = PrettyTable(["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating", "Year"])
     basic_table.align["Title"] = "l"
     basic_table.align["Genre"] = "l"
 
-    # snippet for sorting acc to imdb rating
+    # snippet for sorting acc to imdb rating `-i | -I`
     imdb_table = PrettyTable(["Title", "Imdb Rating"])
     imdb_table.align["Title"] = "l"
 
-    # snippet for sorting acc to tomato rating
+    # snippet for sorting acc to tomato rating `-t | -T`
     tomato_table = PrettyTable(["Title", "Tomato Rating"])
     tomato_table.align["Title"] = "l"
 
-    # snippet for title & awards
-    awards_table = PrettyTable(["Title", "Awards"])
-    awards_table.align["Title"] = "l"
-    awards_table.align["Awards"] = "l"
-
-
-    # snippet for runtime
-    runtime_table = PrettyTable(["Title", "Runtime"])
-    runtime_table.align["Title"] = "l"
-
-    # snippet for movie & cast
-    cast_table = PrettyTable(["Title", "Cast"])
-    cast_table.align["Title"] = "l"
-    cast_table.align["Cast"] = "l"
-
-    # snippet for movie & director
-    direct_table = PrettyTable(["Title", "Director"])
-    direct_table.align["Title"] = "l"
-    direct_table.align["Director"] = "l"
-
-    # snippet for movie & release date
-    release_table = PrettyTable(["Title", "Released"])
-    release_table.align["Title"] = "l"
-
-    # snippet for movie & genre
+    # snippet for movie & genre   `-g`
     genre_table = PrettyTable(["Title", "Genre"])
     genre_table.align["Title"] = "l"
     genre_table.align["Genre"] = "l"
 
+    # snippet for title & awards  `-a`
+    awards_table = PrettyTable(["Title", "Awards"])
+    awards_table.align["Title"] = "l"
+    awards_table.align["Awards"] = "l"
+
+    # snippet for movie & cast  `-c`
+    cast_table = PrettyTable(["Title", "Cast"])
+    cast_table.align["Title"] = "l"
+    cast_table.align["Cast"] = "l"
+
+    # snippet for movie & director  `-d`
+    direct_table = PrettyTable(["Title", "Director"])
+    direct_table.align["Title"] = "l"
+    direct_table.align["Director"] = "l"
+
+    # snippet for movie & release date  `-y`
+    release_table = PrettyTable(["Title", "Released"])
+    release_table.align["Title"] = "l"
+
+    # snippet for runtime  `-r`
+    runtime_table = PrettyTable(["Title", "Runtime"])
+    runtime_table.align["Title"] = "l"
+
     for item in data:
         if len(item["Title"].split()) <= 10:  # So that the table doesn't get fucked
-            basic_table.add_row([item["Title"], item["Genre"],item["imdbRating"], item["Runtime"],item["tomatoRating"], item["Year"]])
+            basic_table.add_row([item["Title"], item["Genre"],
+                                 item["imdbRating"], item["Runtime"],
+                                 item["tomatoRating"], item["Year"]])
             imdb_table.add_row([item["Title"], item["imdbRating"]])
             tomato_table.add_row([item["Title"], item["tomatoRating"]])
             awards_table.add_row([item["Title"], item["Awards"]])
@@ -161,35 +193,5 @@ if __name__ == '__main__':
             release_table.add_row([item["Title"], item["Released"]])
             genre_table.add_row([item["Title"], item["Genre"]])
 
-    # print basic_table
-
-    # print imdb_table.get_string(sortby="Imdb Rating")
-    # print imdb_table.get_string(sortby="Imdb Rating", reversesort=True)
-
-    # print tomato_table.get_string(sortby="Tomato Rating", reversesort=True)
-    # print tomato_table.get_string(sortby="Tomato Rating")
-
-    # print awards_table
-
-    # print runtime_table.get_string(sortby="Runtime", reversesort=True)
-    # print runtime_table.get_string(sortby="Runtime")
-
-    # print cast_table
-
-    # print direct_table
-
-    # print release_table
-
-    print genre_table
-
-
-    # arguments = docopt(__doc__, version='moviemon 1.0')
-    # print(arguments)
-
-
-
-
-
-'''
-Note - Learn about json.dump() json.dumps() json.load() json.loads()
-'''
+    args = docopt(__doc__, version='moviemon 1.0')
+    main(args)

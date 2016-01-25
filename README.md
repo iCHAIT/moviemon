@@ -44,6 +44,7 @@ pip install moviemon
 
 - [ ] Use PrettyTable to tabulate the output in CLI
 - [ ] Start off with switches
+- [ ] Learn about json.dump() json.dumps() json.load() json.loads()
 
 
 ### Known Issues
@@ -51,3 +52,5 @@ pip install moviemon
 * Valid JSON not getting written into file, currently using hacks by explicitly writing `[`, `]` and truncating a comma at last.
 
 * If length of movie title is > 10 then table gets fucked up.
+
+* Runtime column not getting sorted (just considers the first number for sorting)

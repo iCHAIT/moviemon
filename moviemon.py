@@ -22,7 +22,6 @@ Options:
 
 """
 
-
 import os
 import requests
 import json
@@ -76,6 +75,8 @@ def main(docopt_args):
     else:
         print "Use -h for help"
 
+movies = []
+
 
 def scan_dir(path):
     for root, dirs, files in os.walk(path):
@@ -85,17 +86,24 @@ def scan_dir(path):
             if os.path.getsize(path) > (25*1024*1024):
                 ext = os.path.splitext(name)[1]
                 if ext in EXT:
-                    get_movie_info(name)
+                    data = get_movie_info(name)
+                    if data is not None and data['Response'] == 'True':
+                        # if data['Response'] == 'True':  # Movie not found :(
+                            # TODO: Alert user about non existent movie
+                            movies.append(data)
+    with open(dir_json, "w") as out:
+        json.dump(movies, out, indent=2)
 
 
 def get_movie_info(name):
     """Find movie information"""
     movie_info = guess_file_info(name)
+    # print movie_info
     if movie_info['type'] == "movie":
         if 'year' in movie_info:
-            omdb(movie_info['title'], movie_info['year'])
+            return omdb(movie_info['title'], movie_info['year'])
         else:
-            omdb(movie_info['title'], None)
+            return omdb(movie_info['title'], None)
 
 
 def omdb(title, year):
@@ -109,37 +117,25 @@ def omdb(title, year):
         params['y'] = year
 
     url = OMDB_URL + urlencode(params)
-
-    data = requests.get(url)
-
-    source = json.loads(data.text)
-
-    if source['Response'] == 'True':  # Movie not found :(
-        with open(dir_json, "a") as out:
-            json.dump(source, out, indent=2)
-            # `,` is a hack for validating JSON, ask duffer
-            out.write(",\n")
+    return json.loads(requests.get(url).text)
 
 
 if __name__ == '__main__':
     for path in PATHS:
         dir_json = path + ".json"
-        # if os.path.exists(dir_json):
-        #     try:
-        #         os.remove(dir_json)
-        #     except OSError:
-        #         pass
-        # with open(dir_json, "w") as out:   # Hack for validating JSON, ask duffer
-        #     out.write("[")
-        # scan_dir(path)
-        # with open(dir_json, "a") as out:   # Hack for validating JSON, ask duffer
-        #     out.write("]")
+        if os.path.exists(dir_json):
+            try:
+                os.remove(dir_json)
+            except OSError:
+                pass
+        scan_dir(path)
 
     with open(dir_json) as inp:
         data = json.load(inp)
 
     # snippet for -m
-    basic_table = PrettyTable(["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating", "Year"])
+    basic_table = PrettyTable(
+        ["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating", "Year"])
     basic_table.align["Title"] = "l"
     basic_table.align["Genre"] = "l"
 
@@ -180,7 +176,8 @@ if __name__ == '__main__':
     runtime_table.align["Title"] = "l"
 
     for item in data:
-        if len(item["Title"].split()) <= 10:  # So that the table doesn't get fucked
+        # So that the table doesn't get fucked
+        if len(item["Title"].split()) <= 10:
             basic_table.add_row([item["Title"], item["Genre"],
                                  item["imdbRating"], item["Runtime"],
                                  item["tomatoRating"], item["Year"]])

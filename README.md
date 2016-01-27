@@ -30,9 +30,9 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
 
 ### Usage:
 ```sh
-  moviemon.py -h
-  moviemon.py --version
-  moviemon.py [-m | -i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
+  moviemon -h
+  moviemon --version
+  moviemon [-m | -i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
 ```
 
 ### Options:
@@ -54,63 +54,63 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
 
 ### Examples -
 
-* Display basic info about all your movies.
+Display basic info about all your movies.
 
-`$ py moviemon.py -m`
-
-[**DEMO**]()
-
-* Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings.
-
-`$ py moviemon -i`
+`$ moviemon -m`
 
 [**DEMO**]()
 
-* Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings.
+Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings.
 
-`$ py moviemon -t`
-
-[**DEMO**]()
-
-* Display all movies with their Genres.
-
-`$ py moviemon -g`
+`$ moviemon -i`
 
 [**DEMO**]()
 
-* Display all movies with the awards they have recieved.
+Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings.
 
-`$ py moviemon -a`
-
-[**DEMO**]()
-
-* Display all movies with their cast.
-
-`$ py moviemon -c`
+`$ moviemon -t`
 
 [**DEMO**]()
 
-* Display all movies with their director(s).
+Display all movies with their Genres.
 
-`$ py moviemon -d`
-
-[**DEMO**]()
-
-* Display all movies with their release date.
-
-`$ py moviemon -y`
+`$ moviemon -g`
 
 [**DEMO**]()
 
-* Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings(inc).
+Display all movies with the awards they have recieved.
 
-`$ py moviemon -I`
+`$ moviemon -a`
 
 [**DEMO**]()
 
-* Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings(inc).
+Display all movies with their cast.
 
-`$ py moviemon -T`
+`$ moviemon -c`
+
+[**DEMO**]()
+
+Display all movies with their director(s).
+
+`$ moviemon -d`
+
+[**DEMO**]()
+
+Display all movies with their release date.
+
+`$ moviemon -y`
+
+[**DEMO**]()
+
+Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings(inc).
+
+`$ moviemon -I`
+
+[**DEMO**]()
+
+Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings(inc).
+
+`$ moviemon -T`
 
 [**DEMO**]()
 
@@ -119,26 +119,16 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
 
 - [ ] Learn about json.dump() json.dumps() json.load() json.loads()
 
+- [ ] How to take the path to the movies directory?
 
-### Known Issues
+- [ ] If length of movie title is > 10 then table gets fucked up.
 
-* Should I store JSON in a file, or should we fetch the data on the fly?
-
-* Valid JSON not getting written into file, currently using hacks by explicitly writing `[`, `]` and truncating a comma at last.
-
-* If length of movie title is > 10 then table gets fucked up.
-
-* Runtime column not getting sorted (just considers the first number for sorting)
-
-* What about movies that gets guessed incorrectly, eg Oceans Eleven resulting in response="False"
-
-* In the table some results have attribute as N/A, should it be removed from the table?
+- [ ] Runtime column not getting sorted (just considers the first number for sorting)
 
 
 ### Contribute
 
-Want to report bugs, suggest a new feature, improve something?
-Feel free to open issues or send a pull request.
+Feel free to open issues or send a pull request for any bugs or feature requests :)
 
 
 ### License

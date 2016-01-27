@@ -1,2 +1,0 @@
-from .moviemon import main
-

@@ -23,9 +23,12 @@ Options:
 """
 
 import os
+import subprocess
+import textwrap
 import requests
 import json
 from guessit import guess_file_info
+from terminaltables import AsciiTable, DoubleTable, SingleTable
 
 from urllib import urlencode
 
@@ -51,7 +54,8 @@ EXT = tuple(EXT.split())
 
 def main(docopt_args):
     if docopt_args["-m"]:
-        print basic_table.get_string(sortby="Title")
+        # print basic_table.get_string(sortby="Title")
+        print table.table
     elif docopt_args["--imdb"]:
         print imdb_table.get_string(sortby="Imdb Rating", reversesort=True)
     elif docopt_args["--tomato"]:
@@ -89,8 +93,8 @@ def scan_dir(path):
                     data = get_movie_info(name)
                     if data is not None and data['Response'] == 'True':
                         # if data['Response'] == 'True':  # Movie not found :(
-                            # TODO: Alert user about non existent movie
-                            movies.append(data)
+                        # TODO: Alert user about non existent movie
+                        movies.append(data)
     with open(dir_json, "w") as out:
         json.dump(movies, out, indent=2)
 
@@ -98,7 +102,6 @@ def scan_dir(path):
 def get_movie_info(name):
     """Find movie information"""
     movie_info = guess_file_info(name)
-    # print movie_info
     if movie_info['type'] == "movie":
         if 'year' in movie_info:
             return omdb(movie_info['title'], movie_info['year'])
@@ -123,21 +126,32 @@ def omdb(title, year):
 if __name__ == '__main__':
     for path in PATHS:
         dir_json = path + ".json"
-        if os.path.exists(dir_json):
-            try:
-                os.remove(dir_json)
-            except OSError:
-                pass
-        scan_dir(path)
+        # if os.path.exists(dir_json):
+        #     try:
+        #         os.remove(dir_json)
+        #     except OSError:
+        #         pass
+        # scan_dir(path)
 
     with open(dir_json) as inp:
         data = json.load(inp)
 
-    # snippet for -m
-    basic_table = PrettyTable(
-        ["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating", "Year"])
-    basic_table.align["Title"] = "l"
-    basic_table.align["Genre"] = "l"
+    # rows, columns = os.popen('stty size', 'r').read().split()
+    # rows, columns = subprocess.check_output(['stty', 'size']).split()
+    # print (rows), (columns)
+
+    # snippet for -m using PT
+    # basic_table = PrettyTable(
+    #     ["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating", "Year"])
+    # basic_table.align["Title"] = "l"
+    # basic_table.align["Genre"] = "l"
+
+    table_data = [
+        ["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating", "Year"]]
+    table = AsciiTable(table_data)
+
+    # basic_table.align["Title"] = "l"
+    # basic_table.align["Genre"] = "l"
 
     # snippet for sorting acc to imdb rating `-i | -I`
     imdb_table = PrettyTable(["Title", "Imdb Rating"])
@@ -176,19 +190,28 @@ if __name__ == '__main__':
     runtime_table.align["Title"] = "l"
 
     for item in data:
-        # So that the table doesn't get fucked
-        if len(item["Title"].split()) <= 10:
-            basic_table.add_row([item["Title"], item["Genre"],
-                                 item["imdbRating"], item["Runtime"],
-                                 item["tomatoRating"], item["Year"]])
-            imdb_table.add_row([item["Title"], item["imdbRating"]])
-            tomato_table.add_row([item["Title"], item["tomatoRating"]])
-            awards_table.add_row([item["Title"], item["Awards"]])
-            runtime_table.add_row([item["Title"], item["Runtime"]])
-            cast_table.add_row([item["Title"], item["Actors"]])
-            direct_table.add_row([item["Title"], item["Director"]])
-            release_table.add_row([item["Title"], item["Released"]])
-            genre_table.add_row([item["Title"], item["Genre"]])
+        if len(item["Title"]) > table.column_max_width(0):
+            if len(item["Genre"]) > table.column_max_width(1):
+                item["Title"] = textwrap.fill(item["Title"], table.column_max_width(0))
+                item["Genre"] = textwrap.fill(item["Genre"], table.column_max_width(1))
+            else:
+                item["Title"] = textwrap.fill(item["Title"], table.column_max_width(0))
+        elif len(item["Genre"]) > table.column_max_width(1):
+            item["Genre"] = textwrap.fill(item["Genre"], table.column_max_width(1))
+        table_data.append([item["Title"], item["Genre"],
+                           item["imdbRating"], item["Runtime"],
+                           item["tomatoRating"], item["Year"]])
+            # imdb_table.add_row([item["Title"], item["imdbRating"]])
+            # tomato_table.add_row([item["Title"], item["tomatoRating"]])
+            # awards_table.add_row([item["Title"], item["Awards"]])
+            # runtime_table.add_row([item["Title"], item["Runtime"]])
+            # cast_table.add_row([item["Title"], item["Actors"]])
+            # direct_table.add_row([item["Title"], item["Director"]])
+            # release_table.add_row([item["Title"], item["Released"]])
+            # genre_table.add_row([item["Title"], item["Genre"]])
+
+    table.inner_row_border = True
+    # print table.ok
 
     args = docopt(__doc__, version='moviemon 1.0')
     main(args)

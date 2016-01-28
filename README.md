@@ -117,13 +117,15 @@ Display all movies sorted according to their [Tomato Rotten](http://www.rottento
 
 ### TODO
 
-- [ ] Learn about json.dump() json.dumps() json.load() json.loads()
+- [ ] When path is given via CLI make sure to write it in a config file, and overwrite this path when a different path is supplied.
 
-- [ ] How to take the path to the movies directory?
+- [ ] Get the char length of user's terminal and display column's acc.
 
-- [ ] If length of movie title is > 10 then table gets fucked up.
+- [ ] Use prettytable numeric sort for sorting runtime
 
-- [ ] Runtime column not getting sorted (just considers the first number for sorting)
+- [ ] Use infinite progress bar
+
+- [ ] Cases for running moviemon as discussed with duffer
 
 
 ### Contribute

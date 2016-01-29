@@ -117,15 +117,13 @@ Display all movies sorted according to their [Tomato Rotten](http://www.rottento
 
 ### TODO
 
-- [ ] When path is given via CLI make sure to write it in a config file, and overwrite this path when a different path is supplied.
+- [X] When path is given via CLI make sure to write it in a config file, and overwrite this path when a different path is supplied.
 
-- [ ] Get the char length of user's terminal and display column's acc.
+- [X] Get the char length of user's terminal and display column's acc.
 
-- [ ] Use prettytable numeric sort for sorting runtime
+- [ ] Use prettytable numeric sort for sorting runtime or sorting for terminaltable
 
-- [ ] Use infinite progress bar
-
-- [ ] Cases for running moviemon as discussed with duffer
+- [X] Use infinite progress bar
 
 
 ### Contribute

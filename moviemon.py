@@ -1,14 +1,17 @@
 """moviemon.
 
 Usage:
+  moviemon.py PATH
+  moviemon.py --index
+  moviemon.py [-i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
   moviemon.py -h
   moviemon.py --version
-  moviemon.py [-m | -i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
 
 Options:
-  -h, --help     Show this screen.
-  -v, --version     Show version.
-  -m                    Display basic info about all movies.
+  -h, --help            Show this screen.
+  -v, --version         Show version.
+  PATH                  filename
+  --index               REindex your movies directory.
   -i, --imdb            Sort acc. to IMDB rating.(dec)
   -t, --tomato          Sort acc. to Tomato Rotten rating.(dec)
   -g, --genre           Show moviename & its genre.
@@ -23,21 +26,17 @@ Options:
 """
 
 import os
-import subprocess
 import textwrap
 import requests
 import json
 from guessit import guess_file_info
-from terminaltables import AsciiTable, DoubleTable, SingleTable
+from terminaltables import AsciiTable
 
 from urllib import urlencode
 
-from config import PATHS
-
-from prettytable import PrettyTable
-
 from docopt import docopt
 
+from tqdm import tqdm
 
 OMDB_URL = 'http://www.omdbapi.com/?'
 
@@ -53,50 +52,306 @@ EXT = tuple(EXT.split())
 
 
 def main(docopt_args):
-    if docopt_args["-m"]:
-        # print basic_table.get_string(sortby="Title")
-        print table.table
+    if docopt_args["PATH"]:
+        dir_json = docopt_args["PATH"] + ".json"
+        with open("config.py", "w") as inpath:
+            inpath.write("PATH = \"" + docopt_args["PATH"] + "\" ")
+        scan_dir(docopt_args["PATH"], dir_json)
+        print "Run $moviemon"
+
+    elif docopt_args["--index"]:
+        try:
+            import config
+        except ImportError:
+            return False
+        else:
+            val = config.PATH + ".json"
+            scan_dir(config.PATH, val)
+
     elif docopt_args["--imdb"]:
-        print imdb_table.get_string(sortby="Imdb Rating", reversesort=True)
+        try:
+            import config
+        except ImportError:
+            return False
+        else:
+            table_data = [["Title", "Imdb"]]
+            table = AsciiTable(table_data)
+            val = config.PATH + ".json"
+            with open(val) as inp:
+                data = json.load(inp)
+            for item in data:
+                if len(item["Title"]) > table.column_max_width(0):
+                    item["Title"] = textwrap.fill(
+                              item["Title"], table.column_max_width(0))
+                table_data.append([item["Title"], item["imdbRating"]])
+            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[1]))
+            table = AsciiTable(table_data)
+            table.inner_row_border = True
+            print table.table
+
     elif docopt_args["--tomato"]:
-        print tomato_table.get_string(sortby="Tomato Rating", reversesort=True)
+        try:
+            import config
+        except ImportError:
+            return False
+        else:
+            table_data = [["Title", "Tomato"]]
+            table = AsciiTable(table_data)
+            val = config.PATH + ".json"
+            with open(val) as inp:
+                data = json.load(inp)
+            for item in data:
+                if len(item["Title"]) > table.column_max_width(0):
+                    item["Title"] = textwrap.fill(
+                              item["Title"], table.column_max_width(0))
+                table_data.append([item["Title"], item["tomatoRating"]])
+            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[1]))
+            table = AsciiTable(table_data)
+            table.inner_row_border = True
+            print table.table
+
     elif docopt_args["--genre"]:
-        print genre_table.get_string(sortby="Title")
+        try:
+            import config
+        except ImportError:
+            return False
+        else:
+            table_data = [["Title", "Genre"]]
+            table = AsciiTable(table_data)
+            val = config.PATH + ".json"
+            with open(val) as inp:
+                data = json.load(inp)
+            for item in data:
+                if len(item["Title"]) > table.column_max_width(0):
+                    item["Title"] = textwrap.fill(
+                              item["Title"], table.column_max_width(0))
+                table_data.append([item["Title"], item["Genre"]])
+            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[0]))
+            table = AsciiTable(table_data)
+            table.inner_row_border = True
+            print table.table
+
     elif docopt_args["--awards"]:
-        print awards_table.get_string(sortby="Title")
+        try:
+            import config
+        except ImportError:
+            return False
+        else:
+            table_data = [["Title", "Awards"]]
+            table = AsciiTable(table_data)
+            val = config.PATH + ".json"
+            with open(val) as inp:
+                data = json.load(inp)
+            for item in data:
+                if len(item["Title"]) > table.column_max_width(0):
+                    item["Title"] = textwrap.fill(
+                        item["Title"], table.column_max_width(0))
+                    if len(item["Awards"]) > table.column_max_width(1):
+                        item["Awards"] = textwrap.fill(
+                            item["Awards"], table.column_max_width(1))
+                elif len(item["Awards"]) > table.column_max_width(1):
+                    item["Awards"] = textwrap.fill(
+                        item["Awards"], table.column_max_width(1))
+                table_data.append([item["Title"], item["Awards"]])
+            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[0]))
+            table = AsciiTable(table_data)
+            table.inner_row_border = True
+            print table.table
+
     elif docopt_args["--cast"]:
-        print cast_table.get_string(sortby="Title")
+        try:
+            import config
+        except ImportError:
+            return False
+        else:
+            table_data = [["Title", "Cast"]]
+            table = AsciiTable(table_data)
+            val = config.PATH + ".json"
+            with open(val) as inp:
+                data = json.load(inp)
+            for item in data:
+                if len(item["Title"]) > table.column_max_width(0):
+                    item["Title"] = textwrap.fill(
+                        item["Title"], table.column_max_width(0))
+                    if len(item["Actors"]) > table.column_max_width(1):
+                        item["Actors"] = textwrap.fill(
+                            item["Actors"], table.column_max_width(1))
+                elif len(item["Actors"]) > table.column_max_width(1):
+                    item["Actors"] = textwrap.fill(
+                        item["Actors"], table.column_max_width(1))
+                table_data.append([item["Title"], item["Actors"]])
+            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[0]))
+            table = AsciiTable(table_data)
+            table.inner_row_border = True
+            print table.table
+
     elif docopt_args["--director"]:
-        print direct_table.get_string(sortby="Title")
+        try:
+            import config
+        except ImportError:
+            return False
+        else:
+            table_data = [["Title", "Director"]]
+            table = AsciiTable(table_data)
+            val = config.PATH + ".json"
+            with open(val) as inp:
+                data = json.load(inp)
+            for item in data:
+                if len(item["Title"]) > table.column_max_width(0):
+                    item["Title"] = textwrap.fill(
+                        item["Title"], table.column_max_width(0))
+                    if len(item["Director"]) > table.column_max_width(1):
+                        item["Director"] = textwrap.fill(
+                            item["Director"], table.column_max_width(1))
+                elif len(item["Director"]) > table.column_max_width(1):
+                    item["Director"] = textwrap.fill(
+                        item["Director"], table.column_max_width(1))
+                table_data.append([item["Title"], item["Director"]])
+            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[0]))
+            table = AsciiTable(table_data)
+            table.inner_row_border = True
+            print table.table
+
     elif docopt_args["--year"]:
-        print release_table.get_string(sortby="Title")
-    elif docopt_args["--runtime"]:
-        print runtime_table.get_string(sortby="Title")
+        try:
+            import config
+        except ImportError:
+            return False
+        else:
+            table_data = [["Title", "Year"]]
+            table = AsciiTable(table_data)
+            val = config.PATH + ".json"
+            with open(val) as inp:
+                data = json.load(inp)
+            for item in data:
+                if len(item["Title"]) > table.column_max_width(0):
+                    item["Title"] = textwrap.fill(
+                              item["Title"], table.column_max_width(0))
+                table_data.append([item["Title"], item["Released"]])
+            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[0]))
+            table = AsciiTable(table_data)
+            table.inner_row_border = True
+            print table.table
+
+    elif docopt_args["--runtime"]:  # Fix numeric sort
+        try:
+            import config
+        except ImportError:
+            return False
+        else:
+            table_data = [["Title", "Runtime"]]
+            table = AsciiTable(table_data)
+            val = config.PATH + ".json"
+            with open(val) as inp:
+                data = json.load(inp)
+            for item in data:
+                if len(item["Title"]) > table.column_max_width(0):
+                    item["Title"] = textwrap.fill(
+                              item["Title"], table.column_max_width(0))
+                table_data.append([item["Title"], item["Runtime"]])
+            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[1]))
+            table = AsciiTable(table_data)
+            table.inner_row_border = True
+            print table.table
+
     elif docopt_args["--imdb-rev"]:
-        print imdb_table.get_string(sortby="Imdb Rating")
+        try:
+            import config
+        except ImportError:
+            return False
+        else:
+            table_data = [["Title", "IMDB"]]
+            table = AsciiTable(table_data)
+            val = config.PATH + ".json"
+            with open(val) as inp:
+                data = json.load(inp)
+            for item in data:
+                if len(item["Title"]) > table.column_max_width(0):
+                    item["Title"] = textwrap.fill(
+                              item["Title"], table.column_max_width(0))
+                table_data.append([item["Title"], item["imdbRating"]])
+            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[1], reverse=True))
+            table = AsciiTable(table_data)
+            table.inner_row_border = True
+            print table.table
+
     elif docopt_args["--tomato-rev"]:
-        print tomato_table.get_string(sortby="Tomato Rating")
+        try:
+            import config
+        except ImportError:
+            return False
+        else:
+            table_data = [["Title", "Tomato"]]
+            table = AsciiTable(table_data)
+            val = config.PATH + ".json"
+            with open(val) as inp:
+                data = json.load(inp)
+            for item in data:
+                if len(item["Title"]) > table.column_max_width(0):
+                    item["Title"] = textwrap.fill(
+                              item["Title"], table.column_max_width(0))
+                table_data.append([item["Title"], item["tomatoRating"]])
+            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[1], reverse=True))
+            table = AsciiTable(table_data)
+            table.inner_row_border = True
+            print table.table
+
     else:
-        print "Use -h for help"
+        try:
+            import config
+        except ImportError:
+            print "Run $moviemon PATH"
+        else:
+            table_data = [
+                ["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating", "Year"]]
+            table = AsciiTable(table_data)
+            val = config.PATH + ".json"
+            with open(val) as inp:
+                data = json.load(inp)
+
+            for item in data:
+                if len(item["Title"]) > table.column_max_width(0):
+                    item["Title"] = textwrap.fill(
+                        item["Title"], table.column_max_width(0))
+                    if len(item["Genre"]) > table.column_max_width(1):
+                        item["Genre"] = textwrap.fill(
+                            item["Genre"], table.column_max_width(1))
+                elif len(item["Genre"]) > table.column_max_width(1):
+                    item["Genre"] = textwrap.fill(
+                        item["Genre"], table.column_max_width(1))
+                table_data.append([item["Title"], item["Genre"],
+                                   item["imdbRating"], item["Runtime"],
+                                   item["tomatoRating"], item["Year"]])
+            table.inner_row_border = True
+            print table.table
 
 movies = []
+movie_name = []
 
 
-def scan_dir(path):
-    for root, dirs, files in os.walk(path):
+def scan_dir(path, dir_json):
+    # Preprocess the total files count
+    filecounter = 0
+    for root, dirs, files in tqdm(os.walk(path)):
         for name in files:
             path = os.path.join(root, name)
-            # Validation for file size
             if os.path.getsize(path) > (25*1024*1024):
                 ext = os.path.splitext(name)[1]
                 if ext in EXT:
-                    data = get_movie_info(name)
-                    if data is not None and data['Response'] == 'True':
-                        # if data['Response'] == 'True':  # Movie not found :(
-                        # TODO: Alert user about non existent movie
-                        movies.append(data)
-    with open(dir_json, "w") as out:
-        json.dump(movies, out, indent=2)
+                    movie_name.append(name)
+                    filecounter += 1
+
+    with tqdm(total=filecounter, leave=True, unit='B',
+              unit_scale=True) as pbar:
+        for name in movie_name:
+            data = get_movie_info(name)
+            pbar.update()
+            if data is not None and data['Response'] == 'True':
+                # if data['Response'] == 'False':  # Movie not found :(
+                # TODO: Alert user about non existent movie
+                movies.append(data)
+        with open(dir_json, "w") as out:
+            json.dump(movies, out, indent=2)
 
 
 def get_movie_info(name):
@@ -124,94 +379,5 @@ def omdb(title, year):
 
 
 if __name__ == '__main__':
-    for path in PATHS:
-        dir_json = path + ".json"
-        # if os.path.exists(dir_json):
-        #     try:
-        #         os.remove(dir_json)
-        #     except OSError:
-        #         pass
-        # scan_dir(path)
-
-    with open(dir_json) as inp:
-        data = json.load(inp)
-
-    # rows, columns = os.popen('stty size', 'r').read().split()
-    # rows, columns = subprocess.check_output(['stty', 'size']).split()
-    # print (rows), (columns)
-
-    # snippet for -m using PT
-    # basic_table = PrettyTable(
-    #     ["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating", "Year"])
-    # basic_table.align["Title"] = "l"
-    # basic_table.align["Genre"] = "l"
-
-    table_data = [
-        ["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating", "Year"]]
-    table = AsciiTable(table_data)
-
-    # basic_table.align["Title"] = "l"
-    # basic_table.align["Genre"] = "l"
-
-    # snippet for sorting acc to imdb rating `-i | -I`
-    imdb_table = PrettyTable(["Title", "Imdb Rating"])
-    imdb_table.align["Title"] = "l"
-
-    # snippet for sorting acc to tomato rating `-t | -T`
-    tomato_table = PrettyTable(["Title", "Tomato Rating"])
-    tomato_table.align["Title"] = "l"
-
-    # snippet for movie & genre   `-g`
-    genre_table = PrettyTable(["Title", "Genre"])
-    genre_table.align["Title"] = "l"
-    genre_table.align["Genre"] = "l"
-
-    # snippet for title & awards  `-a`
-    awards_table = PrettyTable(["Title", "Awards"])
-    awards_table.align["Title"] = "l"
-    awards_table.align["Awards"] = "l"
-
-    # snippet for movie & cast  `-c`
-    cast_table = PrettyTable(["Title", "Cast"])
-    cast_table.align["Title"] = "l"
-    cast_table.align["Cast"] = "l"
-
-    # snippet for movie & director  `-d`
-    direct_table = PrettyTable(["Title", "Director"])
-    direct_table.align["Title"] = "l"
-    direct_table.align["Director"] = "l"
-
-    # snippet for movie & release date  `-y`
-    release_table = PrettyTable(["Title", "Released"])
-    release_table.align["Title"] = "l"
-
-    # snippet for runtime  `-r`
-    runtime_table = PrettyTable(["Title", "Runtime"])
-    runtime_table.align["Title"] = "l"
-
-    for item in data:
-        if len(item["Title"]) > table.column_max_width(0):
-            if len(item["Genre"]) > table.column_max_width(1):
-                item["Title"] = textwrap.fill(item["Title"], table.column_max_width(0))
-                item["Genre"] = textwrap.fill(item["Genre"], table.column_max_width(1))
-            else:
-                item["Title"] = textwrap.fill(item["Title"], table.column_max_width(0))
-        elif len(item["Genre"]) > table.column_max_width(1):
-            item["Genre"] = textwrap.fill(item["Genre"], table.column_max_width(1))
-        table_data.append([item["Title"], item["Genre"],
-                           item["imdbRating"], item["Runtime"],
-                           item["tomatoRating"], item["Year"]])
-            # imdb_table.add_row([item["Title"], item["imdbRating"]])
-            # tomato_table.add_row([item["Title"], item["tomatoRating"]])
-            # awards_table.add_row([item["Title"], item["Awards"]])
-            # runtime_table.add_row([item["Title"], item["Runtime"]])
-            # cast_table.add_row([item["Title"], item["Actors"]])
-            # direct_table.add_row([item["Title"], item["Director"]])
-            # release_table.add_row([item["Title"], item["Released"]])
-            # genre_table.add_row([item["Title"], item["Genre"]])
-
-    table.inner_row_border = True
-    # print table.ok
-
     args = docopt(__doc__, version='moviemon 1.0')
     main(args)

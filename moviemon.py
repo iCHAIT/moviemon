@@ -10,8 +10,8 @@ Usage:
 Options:
   -h, --help            Show this screen.
   -v, --version         Show version.
-  PATH                  filename
-  --index               REindex your movies directory.
+  PATH                  Path to your movies dir for indexing it.
+  --index               Reindex your movies directory.
   -i, --imdb            Sort acc. to IMDB rating.(dec)
   -t, --tomato          Sort acc. to Tomato Rotten rating.(dec)
   -g, --genre           Show moviename & its genre.
@@ -84,7 +84,8 @@ def main(docopt_args):
                     item["Title"] = textwrap.fill(
                               item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["imdbRating"]])
-            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[1]))
+            table_data = (table_data[:1] + sorted(table_data[1:],
+                          key=lambda i: i[1]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
             print table.table
@@ -105,7 +106,8 @@ def main(docopt_args):
                     item["Title"] = textwrap.fill(
                               item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["tomatoRating"]])
-            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[1]))
+            table_data = (table_data[:1] + sorted(table_data[1:],
+                          key=lambda i: i[1]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
             print table.table
@@ -126,7 +128,8 @@ def main(docopt_args):
                     item["Title"] = textwrap.fill(
                               item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["Genre"]])
-            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[0]))
+            table_data = (table_data[:1] + sorted(table_data[1:],
+                          key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
             print table.table
@@ -153,7 +156,8 @@ def main(docopt_args):
                     item["Awards"] = textwrap.fill(
                         item["Awards"], table.column_max_width(1))
                 table_data.append([item["Title"], item["Awards"]])
-            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[0]))
+            table_data = (table_data[:1] + sorted(table_data[1:],
+                          key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
             print table.table
@@ -180,7 +184,8 @@ def main(docopt_args):
                     item["Actors"] = textwrap.fill(
                         item["Actors"], table.column_max_width(1))
                 table_data.append([item["Title"], item["Actors"]])
-            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[0]))
+            table_data = (table_data[:1] + sorted(table_data[1:],
+                          key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
             print table.table
@@ -207,7 +212,8 @@ def main(docopt_args):
                     item["Director"] = textwrap.fill(
                         item["Director"], table.column_max_width(1))
                 table_data.append([item["Title"], item["Director"]])
-            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[0]))
+            table_data = (table_data[:1] + sorted(table_data[1:],
+                          key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
             print table.table
@@ -228,7 +234,8 @@ def main(docopt_args):
                     item["Title"] = textwrap.fill(
                               item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["Released"]])
-            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[0]))
+            table_data = (table_data[:1] + sorted(table_data[1:],
+                          key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
             print table.table
@@ -249,7 +256,8 @@ def main(docopt_args):
                     item["Title"] = textwrap.fill(
                               item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["Runtime"]])
-            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[1]))
+            table_data = (table_data[:1] + sorted(table_data[1:],
+                          key=lambda i: i[1]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
             print table.table
@@ -270,7 +278,8 @@ def main(docopt_args):
                     item["Title"] = textwrap.fill(
                               item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["imdbRating"]])
-            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[1], reverse=True))
+            table_data = (table_data[:1] + sorted(table_data[1:],
+                          key=lambda i: i[1], reverse=True))
             table = AsciiTable(table_data)
             table.inner_row_border = True
             print table.table
@@ -291,7 +300,8 @@ def main(docopt_args):
                     item["Title"] = textwrap.fill(
                               item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["tomatoRating"]])
-            table_data = (table_data[:1] + sorted(table_data[1:], key=lambda i: i[1], reverse=True))
+            table_data = (table_data[:1] + sorted(table_data[1:],
+                          key=lambda i: i[1], reverse=True))
             table = AsciiTable(table_data)
             table.inner_row_border = True
             print table.table
@@ -303,7 +313,8 @@ def main(docopt_args):
             print "Run $moviemon PATH"
         else:
             table_data = [
-                ["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating", "Year"]]
+                ["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating",
+                 "Year"]]
             table = AsciiTable(table_data)
             val = config.PATH + ".json"
             with open(val) as inp:

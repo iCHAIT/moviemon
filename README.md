@@ -30,24 +30,27 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
 
 ### Usage:
 ```sh
+  moviemon PATH
+  moviemon --index
+  moviemon [-i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
   moviemon -h
   moviemon --version
-  moviemon [-m | -i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
 ```
 
 ### Options:
 ```sh
-  -h --help     Show this screen.
-  --version     Show version.
-  -m                    Display basic info about all movies.
+  -h, --help            Show this screen.
+  -v, --version         Show version.
+  PATH                  Path to your movies dir.
+  --index               Reindex your movies directory.
   -i, --imdb            Sort acc. to IMDB rating.(dec)
   -t, --tomato          Sort acc. to Tomato Rotten rating.(dec)
-  -g, --genre           Show moviename and its genre.
-  -a, --awards          Show moviename and awards recieved.
-  -c, --cast            Show moviename and its cast.
-  -d, --director        Show moviename and director name.
-  -y, --year            Show moviename and its release year.
-  -r, --runtime         Show moviename and its runtime
+  -g, --genre           Show moviename & its genre.
+  -a, --awards          Show moviename & awards recieved.
+  -c, --cast            Show moviename & its cast.
+  -d, --director        Show moviename & director name.
+  -y, --year            Show moviename & its release year.
+  -r, --runtime         Show moviename & its runtime.
   -I, --imdb-rev        Sort acc. to IMDB rating.(inc)
   -T, --tomato-rev      Sort acc. to Tomato Rotten rating.(inc)
 ```
@@ -117,13 +120,7 @@ Display all movies sorted according to their [Tomato Rotten](http://www.rottento
 
 ### TODO
 
-- [X] When path is given via CLI make sure to write it in a config file, and overwrite this path when a different path is supplied.
-
-- [X] Get the char length of user's terminal and display column's acc.
-
-- [ ] Use prettytable numeric sort for sorting runtime or sorting for terminaltable
-
-- [X] Use infinite progress bar
+- [ ] Use numeric sort for sorting runtime, add reverse runtime func.
 
 
 ### Contribute

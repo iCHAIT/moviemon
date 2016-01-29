@@ -38,6 +38,9 @@ from docopt import docopt
 
 from tqdm import tqdm
 
+from colorama import init, Fore
+init()
+
 OMDB_URL = 'http://www.omdbapi.com/?'
 
 EXT = (".3g2 .3gp .3gp2 .3gpp .60d .ajp .asf .asx .avchd .avi .bik .bix"
@@ -53,11 +56,24 @@ EXT = tuple(EXT.split())
 
 def main(docopt_args):
     if docopt_args["PATH"]:
+        print "\n\nIndexing all movies inside ", docopt_args["PATH"] + "\n\n"
         dir_json = docopt_args["PATH"] + ".json"
         with open("config.py", "w") as inpath:
             inpath.write("PATH = \"" + docopt_args["PATH"] + "\" ")
         scan_dir(docopt_args["PATH"], dir_json)
-        print "Run $moviemon"
+        if movie_not_found:
+            print "\n\n"
+            print Fore.RED + 'Data for the following movie(s) could not be fetched -'
+            print "\n"
+            for val in movie_not_found:
+                print Fore.RED + val
+        if not_a_movie:
+            print "\n\n"
+            print Fore.RED + "The following media in the folder is not movie type -"
+            print "\n"
+            for val in not_a_movie:
+                print Fore.RED + val
+        print Fore.GREEN + "\n\nRun $moviemon\n\n"
 
     elif docopt_args["--index"]:
         try:
@@ -88,6 +104,7 @@ def main(docopt_args):
                           key=lambda i: i[1]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
+            print "\n"
             print table.table
 
     elif docopt_args["--tomato"]:
@@ -110,6 +127,7 @@ def main(docopt_args):
                           key=lambda i: i[1]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
+            print "\n"
             print table.table
 
     elif docopt_args["--genre"]:
@@ -132,6 +150,7 @@ def main(docopt_args):
                           key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
+            print "\n"
             print table.table
 
     elif docopt_args["--awards"]:
@@ -160,6 +179,7 @@ def main(docopt_args):
                           key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
+            print "\n"
             print table.table
 
     elif docopt_args["--cast"]:
@@ -188,6 +208,7 @@ def main(docopt_args):
                           key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
+            print "\n"
             print table.table
 
     elif docopt_args["--director"]:
@@ -216,6 +237,7 @@ def main(docopt_args):
                           key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
+            print "\n"
             print table.table
 
     elif docopt_args["--year"]:
@@ -238,6 +260,7 @@ def main(docopt_args):
                           key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
+            print "\n"
             print table.table
 
     elif docopt_args["--runtime"]:  # Fix numeric sort
@@ -260,6 +283,7 @@ def main(docopt_args):
                           key=lambda i: i[1]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
+            print "\n"
             print table.table
 
     elif docopt_args["--imdb-rev"]:
@@ -282,6 +306,7 @@ def main(docopt_args):
                           key=lambda i: i[1], reverse=True))
             table = AsciiTable(table_data)
             table.inner_row_border = True
+            print "\n"
             print table.table
 
     elif docopt_args["--tomato-rev"]:
@@ -304,6 +329,7 @@ def main(docopt_args):
                           key=lambda i: i[1], reverse=True))
             table = AsciiTable(table_data)
             table.inner_row_border = True
+            print "\n"
             print table.table
 
     else:
@@ -334,10 +360,13 @@ def main(docopt_args):
                                    item["imdbRating"], item["Runtime"],
                                    item["tomatoRating"], item["Year"]])
             table.inner_row_border = True
+            print "\n"
             print table.table
 
 movies = []
 movie_name = []
+not_a_movie = []
+movie_not_found = []
 
 
 def scan_dir(path, dir_json):
@@ -358,9 +387,10 @@ def scan_dir(path, dir_json):
             data = get_movie_info(name)
             pbar.update()
             if data is not None and data['Response'] == 'True':
-                # if data['Response'] == 'False':  # Movie not found :(
-                # TODO: Alert user about non existent movie
                 movies.append(data)
+            else:
+                if data is not None:
+                    movie_not_found.append(name)
         with open(dir_json, "w") as out:
             json.dump(movies, out, indent=2)
 
@@ -373,6 +403,8 @@ def get_movie_info(name):
             return omdb(movie_info['title'], movie_info['year'])
         else:
             return omdb(movie_info['title'], None)
+    else:
+        not_a_movie.append(name)
 
 
 def omdb(title, year):

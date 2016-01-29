@@ -26,7 +26,6 @@ Options:
 """
 
 from __future__ import print_function
-from __future__ import absolute_import
 import os
 import textwrap
 import requests
@@ -94,7 +93,7 @@ def main(docopt_args):
         except ImportError:
             return False
         else:
-            table_data = [["Title", "Imdb"]]
+            table_data = [["Title", "Imdb Rating"]]
             table = AsciiTable(table_data)
             val = config.PATH + ".json"
             with open(val) as inp:
@@ -107,6 +106,7 @@ def main(docopt_args):
             table_data = (table_data[:1] + sorted(table_data[1:],
                                                   key=lambda i: i[1]))
             table = AsciiTable(table_data)
+            table.justify_columns[1] = "center"
             table.inner_row_border = True
             print("\n")
             print(table.table)
@@ -117,7 +117,7 @@ def main(docopt_args):
         except ImportError:
             return False
         else:
-            table_data = [["Title", "Tomato"]]
+            table_data = [["Title", "Tomato Rating"]]
             table = AsciiTable(table_data)
             val = config.PATH + ".json"
             with open(val) as inp:
@@ -221,7 +221,7 @@ def main(docopt_args):
         except ImportError:
             return False
         else:
-            table_data = [["Title", "Director"]]
+            table_data = [["Title", "Director(s)"]]
             table = AsciiTable(table_data)
             val = config.PATH + ".json"
             with open(val) as inp:
@@ -250,7 +250,7 @@ def main(docopt_args):
         except ImportError:
             return False
         else:
-            table_data = [["Title", "Year"]]
+            table_data = [["Title", "Release Date"]]
             table = AsciiTable(table_data)
             val = config.PATH + ".json"
             with open(val) as inp:
@@ -296,7 +296,7 @@ def main(docopt_args):
         except ImportError:
             return False
         else:
-            table_data = [["Title", "IMDB"]]
+            table_data = [["Title", "IMDB Rating"]]
             table = AsciiTable(table_data)
             val = config.PATH + ".json"
             with open(val) as inp:
@@ -319,7 +319,7 @@ def main(docopt_args):
         except ImportError:
             return False
         else:
-            table_data = [["Title", "Tomato"]]
+            table_data = [["Title", "Tomato Rating"]]
             table = AsciiTable(table_data)
             val = config.PATH + ".json"
             with open(val) as inp:
@@ -343,7 +343,7 @@ def main(docopt_args):
             print("Run $moviemon PATH")
         else:
             table_data = [
-                ["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating",
+                ["Title", "Genre", "Imdb", "Runtime", "Tomato",
                  "Year"]]
             table = AsciiTable(table_data)
             val = config.PATH + ".json"
@@ -394,6 +394,9 @@ def scan_dir(path, dir_json):
             data = get_movie_info(name)
             pbar.update()
             if data is not None and data['Response'] == 'True':
+                for key, val in data.items():
+                    if val == "N/A":
+                        data[key] = "-"  # Should we replace N/A with `-`?
                 movies.append(data)
             else:
                 if data is not None:

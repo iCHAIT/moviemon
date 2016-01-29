@@ -121,12 +121,10 @@ Display all movies sorted according to their [Tomato Rotten](http://www.rottento
 ### TODO
 
 - [ ] Use numeric sort for sorting runtime, add reverse runtime func.
+- [ ] Center align table headings? Table headings and rows looks monotonous.
 - [ ] Code optimizations
 - [ ] Github page
 - [ ] asciinema
-- [ ] Center align table headings? Table headings and rows lokks monotonous.
-- [ ] Replace N/A with "-" ?
-- [ ] port to python3
 
 
 ### Contribute

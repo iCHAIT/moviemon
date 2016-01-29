@@ -25,20 +25,22 @@ Options:
 
 """
 
+from __future__ import print_function
+from __future__ import absolute_import
 import os
 import textwrap
 import requests
 import json
 from guessit import guess_file_info
 from terminaltables import AsciiTable
-
-from urllib import urlencode
-
+try:
+    from urllib.parse import urlencode
+except:
+    from urllib import urlencode
 from docopt import docopt
-
 from tqdm import tqdm
-
 from colorama import init, Fore
+
 init()
 
 OMDB_URL = 'http://www.omdbapi.com/?'
@@ -56,24 +58,26 @@ EXT = tuple(EXT.split())
 
 def main(docopt_args):
     if docopt_args["PATH"]:
-        print "\n\nIndexing all movies inside ", docopt_args["PATH"] + "\n\n"
+        print("\n\nIndexing all movies inside ", docopt_args["PATH"] + "\n\n")
         dir_json = docopt_args["PATH"] + ".json"
         with open("config.py", "w") as inpath:
             inpath.write("PATH = \"" + docopt_args["PATH"] + "\" ")
         scan_dir(docopt_args["PATH"], dir_json)
         if movie_not_found:
-            print "\n\n"
-            print Fore.RED + 'Data for the following movie(s) could not be fetched -'
-            print "\n"
+            print("\n\n")
+            print(Fore.RED +
+                  'Data for the following movie(s) could not be fetched -')
+            print("\n")
             for val in movie_not_found:
-                print Fore.RED + val
+                print(Fore.RED + val)
         if not_a_movie:
-            print "\n\n"
-            print Fore.RED + "The following media in the folder is not movie type -"
-            print "\n"
+            print("\n\n")
+            print(Fore.RED +
+                  "The following media in the folder is not movie type -")
+            print("\n")
             for val in not_a_movie:
-                print Fore.RED + val
-        print Fore.GREEN + "\n\nRun $moviemon\n\n"
+                print(Fore.RED + val)
+        print(Fore.GREEN + "\n\nRun $moviemon\n\n")
 
     elif docopt_args["--index"]:
         try:
@@ -98,14 +102,14 @@ def main(docopt_args):
             for item in data:
                 if len(item["Title"]) > table.column_max_width(0):
                     item["Title"] = textwrap.fill(
-                              item["Title"], table.column_max_width(0))
+                        item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["imdbRating"]])
             table_data = (table_data[:1] + sorted(table_data[1:],
-                          key=lambda i: i[1]))
+                                                  key=lambda i: i[1]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
-            print "\n"
-            print table.table
+            print("\n")
+            print(table.table)
 
     elif docopt_args["--tomato"]:
         try:
@@ -121,14 +125,14 @@ def main(docopt_args):
             for item in data:
                 if len(item["Title"]) > table.column_max_width(0):
                     item["Title"] = textwrap.fill(
-                              item["Title"], table.column_max_width(0))
+                        item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["tomatoRating"]])
             table_data = (table_data[:1] + sorted(table_data[1:],
-                          key=lambda i: i[1]))
+                                                  key=lambda i: i[1]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
-            print "\n"
-            print table.table
+            print("\n")
+            print(table.table)
 
     elif docopt_args["--genre"]:
         try:
@@ -144,14 +148,14 @@ def main(docopt_args):
             for item in data:
                 if len(item["Title"]) > table.column_max_width(0):
                     item["Title"] = textwrap.fill(
-                              item["Title"], table.column_max_width(0))
+                        item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["Genre"]])
             table_data = (table_data[:1] + sorted(table_data[1:],
-                          key=lambda i: i[0]))
+                                                  key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
-            print "\n"
-            print table.table
+            print("\n")
+            print(table.table)
 
     elif docopt_args["--awards"]:
         try:
@@ -176,11 +180,11 @@ def main(docopt_args):
                         item["Awards"], table.column_max_width(1))
                 table_data.append([item["Title"], item["Awards"]])
             table_data = (table_data[:1] + sorted(table_data[1:],
-                          key=lambda i: i[0]))
+                                                  key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
-            print "\n"
-            print table.table
+            print("\n")
+            print(table.table)
 
     elif docopt_args["--cast"]:
         try:
@@ -205,11 +209,11 @@ def main(docopt_args):
                         item["Actors"], table.column_max_width(1))
                 table_data.append([item["Title"], item["Actors"]])
             table_data = (table_data[:1] + sorted(table_data[1:],
-                          key=lambda i: i[0]))
+                                                  key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
-            print "\n"
-            print table.table
+            print("\n")
+            print(table.table)
 
     elif docopt_args["--director"]:
         try:
@@ -234,11 +238,11 @@ def main(docopt_args):
                         item["Director"], table.column_max_width(1))
                 table_data.append([item["Title"], item["Director"]])
             table_data = (table_data[:1] + sorted(table_data[1:],
-                          key=lambda i: i[0]))
+                                                  key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
-            print "\n"
-            print table.table
+            print("\n")
+            print(table.table)
 
     elif docopt_args["--year"]:
         try:
@@ -254,14 +258,14 @@ def main(docopt_args):
             for item in data:
                 if len(item["Title"]) > table.column_max_width(0):
                     item["Title"] = textwrap.fill(
-                              item["Title"], table.column_max_width(0))
+                        item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["Released"]])
             table_data = (table_data[:1] + sorted(table_data[1:],
-                          key=lambda i: i[0]))
+                                                  key=lambda i: i[0]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
-            print "\n"
-            print table.table
+            print("\n")
+            print(table.table)
 
     elif docopt_args["--runtime"]:  # Fix numeric sort
         try:
@@ -277,14 +281,14 @@ def main(docopt_args):
             for item in data:
                 if len(item["Title"]) > table.column_max_width(0):
                     item["Title"] = textwrap.fill(
-                              item["Title"], table.column_max_width(0))
+                        item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["Runtime"]])
             table_data = (table_data[:1] + sorted(table_data[1:],
-                          key=lambda i: i[1]))
+                                                  key=lambda i: i[1]))
             table = AsciiTable(table_data)
             table.inner_row_border = True
-            print "\n"
-            print table.table
+            print("\n")
+            print(table.table)
 
     elif docopt_args["--imdb-rev"]:
         try:
@@ -300,14 +304,14 @@ def main(docopt_args):
             for item in data:
                 if len(item["Title"]) > table.column_max_width(0):
                     item["Title"] = textwrap.fill(
-                              item["Title"], table.column_max_width(0))
+                        item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["imdbRating"]])
             table_data = (table_data[:1] + sorted(table_data[1:],
                           key=lambda i: i[1], reverse=True))
             table = AsciiTable(table_data)
             table.inner_row_border = True
-            print "\n"
-            print table.table
+            print("\n")
+            print(table.table)
 
     elif docopt_args["--tomato-rev"]:
         try:
@@ -323,20 +327,20 @@ def main(docopt_args):
             for item in data:
                 if len(item["Title"]) > table.column_max_width(0):
                     item["Title"] = textwrap.fill(
-                              item["Title"], table.column_max_width(0))
+                        item["Title"], table.column_max_width(0))
                 table_data.append([item["Title"], item["tomatoRating"]])
             table_data = (table_data[:1] + sorted(table_data[1:],
                           key=lambda i: i[1], reverse=True))
             table = AsciiTable(table_data)
             table.inner_row_border = True
-            print "\n"
-            print table.table
+            print("\n")
+            print(table.table)
 
     else:
         try:
             import config
         except ImportError:
-            print "Run $moviemon PATH"
+            print("Run $moviemon PATH")
         else:
             table_data = [
                 ["Title", "Genre", "Imdb Rating", "Runtime", "Tomato Rating",
@@ -359,9 +363,12 @@ def main(docopt_args):
                 table_data.append([item["Title"], item["Genre"],
                                    item["imdbRating"], item["Runtime"],
                                    item["tomatoRating"], item["Year"]])
+            table_data = (table_data[:1] + sorted(table_data[1:],
+                                                  key=lambda i: i[0]))
+            table = AsciiTable(table_data)
             table.inner_row_border = True
-            print "\n"
-            print table.table
+            print("\n")
+            print(table.table)
 
 movies = []
 movie_name = []

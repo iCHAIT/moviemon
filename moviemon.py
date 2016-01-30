@@ -57,26 +57,35 @@ EXT = tuple(EXT.split())
 
 def main(docopt_args):
     if docopt_args["PATH"]:
-        print("\n\nIndexing all movies inside ", docopt_args["PATH"] + "\n\n")
-        dir_json = docopt_args["PATH"] + ".json"
-        with open("config.py", "w") as inpath:
-            inpath.write("PATH = \"" + docopt_args["PATH"] + "\" ")
-        scan_dir(docopt_args["PATH"], dir_json)
-        if movie_not_found:
-            print("\n\n")
-            print(Fore.RED +
-                  'Data for the following movie(s) could not be fetched -')
-            print("\n")
-            for val in movie_not_found:
-                print(Fore.RED + val)
-        if not_a_movie:
-            print("\n\n")
-            print(Fore.RED +
-                  "The following media in the folder is not movie type -")
-            print("\n")
-            for val in not_a_movie:
-                print(Fore.RED + val)
-        print(Fore.GREEN + "\n\nRun $moviemon\n\n")
+        if os.path.isdir(docopt_args["PATH"]):
+            print("\n\nIndexing all movies inside ",
+                  docopt_args["PATH"] + "\n\n")
+            dir_json = docopt_args["PATH"] + ".json"
+            with open("config.py", "w") as inpath:
+                inpath.write("PATH = \"" + docopt_args["PATH"] + "\" ")
+            scan_dir(docopt_args["PATH"], dir_json)
+            if movie_name:
+                if movie_not_found:
+                    print("\n\n")
+                    print(Fore.RED + "Data for the following movie(s)"
+                          " could not be fetched -")
+                    print("\n")
+                    for val in movie_not_found:
+                        print(Fore.RED + val)
+                if not_a_movie:
+                    print("\n\n")
+                    print(Fore.RED + "The following media in the"
+                          " folder is not movie type -")
+                    print("\n")
+                    for val in not_a_movie:
+                        print(Fore.RED + val)
+                print(Fore.GREEN + "\n\nRun $moviemon\n\n")
+            else:
+                print(Fore.RED + "\n\nGiven directory does not contain movies."
+                      " Pass a directory containing movies\n\n")
+        else:
+            print(Fore.RED + "\n\nDirectory does not exists."
+                  " Please pass a valid directory containing movies.\n\n")
 
     elif docopt_args["--index"]:
         try:
@@ -88,16 +97,16 @@ def main(docopt_args):
             scan_dir(config.PATH, val)
 
     elif docopt_args["--imdb"]:
-            table_data = [["Title", "Imdb Rating"]]
-            data, table = buttler(table_data)
-            for item in data:
-                if len(item["Title"]) > table.column_max_width(0):
-                    item["Title"] = textwrap.fill(
-                        item["Title"], table.column_max_width(0))
-                table_data.append([item["Title"], item["imdbRating"]])
-            table_data = (table_data[:1] + sorted(table_data[1:],
-                                                  key=lambda i: i[1]))
-            print_table(table_data)
+        table_data = [["Title", "Imdb Rating"]]
+        data, table = buttler(table_data)
+        for item in data:
+            if len(item["Title"]) > table.column_max_width(0):
+                item["Title"] = textwrap.fill(
+                    item["Title"], table.column_max_width(0))
+            table_data.append([item["Title"], item["imdbRating"]])
+        table_data = (table_data[:1] + sorted(table_data[1:],
+                                              key=lambda i: i[1]))
+        print_table(table_data)
 
     elif docopt_args["--tomato"]:
         table_data = [["Title", "Tomato Rating"]]
@@ -210,7 +219,8 @@ def main(docopt_args):
                     item["Title"], table.column_max_width(0))
             table_data.append([item["Title"], item["imdbRating"]])
         table_data = (table_data[:1] + sorted(table_data[1:],
-                      key=lambda i: i[1], reverse=True))
+                                              key=lambda i: i[1],
+                                              reverse=True))
         print_table(table_data)
 
     elif docopt_args["--tomato-rev"]:
@@ -222,7 +232,8 @@ def main(docopt_args):
                     item["Title"], table.column_max_width(0))
             table_data.append([item["Title"], item["tomatoRating"]])
         table_data = (table_data[:1] + sorted(table_data[1:],
-                      key=lambda i: i[1], reverse=True))
+                                              key=lambda i: i[1],
+                                              reverse=True))
         print_table(table_data)
 
     else:

@@ -122,14 +122,18 @@ Display all movies sorted according to their [Tomato Rotten](http://www.rottento
 
 - [ ] Use numeric sort for sorting runtime, add reverse runtime func.
 - [ ] Center align table headings? Table headings and rows looks monotonous.
-- [ ] Code optimizations
 - [ ] Github page
 - [ ] asciinema
 
 
+### Shoutout
+
+Big thanks to @dufferzafar for his [awesome work](https://github.com/dufferzafar/what-to-watch).
+
+
 ### Contribute
 
-Feel free to open issues or send a pull request for any bugs or feature requests :)
+Found a bug or want to suggest a new feature? Report it by opening issues. Feel free to send a pull request for the same ;)
 
 
 ### License

@@ -6,6 +6,7 @@ Scans folders for movies, and fetches their data from the OMDB API and displays 
 
 (Bada wala GIF)
 
+
 ### Using [pip](https://pypi.python.org/pypi/pip/)
 
 `$ pip install moviemon`
@@ -24,17 +25,19 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
 ### Dependencies
 
 * guessit
-* prettytable
+* terminaltables
 * docopt
+* tqdm
+* colorama
 
 
 ### Usage:
 ```sh
-  moviemon PATH
-  moviemon --index
-  moviemon [-i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
-  moviemon -h
-  moviemon --version
+  moviemon.py PATH
+  moviemon.py --index
+  moviemon.py [-i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
+  moviemon.py -h | --help
+  moviemon.py --version
 ```
 
 ### Options:
@@ -121,14 +124,14 @@ Display all movies sorted according to their [Tomato Rotten](http://www.rottento
 ### TODO
 
 - [ ] Use numeric sort for sorting runtime, add reverse runtime func.
-- [ ] Center align table headings? Table headings and rows looks monotonous.
-- [ ] Github page
+- [ ] Package with pip
 - [ ] asciinema
+- [ ] Github page
 
 
-### Shoutout
+### Shout-out
 
-Big thanks to @dufferzafar for his [awesome work](https://github.com/dufferzafar/what-to-watch).
+Big thanks to [@dufferzafar](https://github.com/dufferzafar) for his [awesome work](https://github.com/dufferzafar/what-to-watch).
 
 
 ### Contribute

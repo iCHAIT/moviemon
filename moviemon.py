@@ -2,16 +2,14 @@
 
 Usage:
   moviemon.py PATH
-  moviemon.py --index
   moviemon.py [-i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
-  moviemon.py -h
+  moviemon.py -h | --help
   moviemon.py --version
 
 Options:
   -h, --help            Show this screen.
-  -v, --version         Show version.
-  PATH                  Path to your movies dir for indexing it.
-  --index               Reindex your movies directory.
+  --version             Show version.
+  PATH                  Path to movies dir. for indexing/reindexing your movies.
   -i, --imdb            Sort acc. to IMDB rating.(dec)
   -t, --tomato          Sort acc. to Tomato Rotten rating.(dec)
   -g, --genre           Show moviename & its genre.
@@ -87,17 +85,8 @@ def main(docopt_args):
             print(Fore.RED + "\n\nDirectory does not exists."
                   " Please pass a valid directory containing movies.\n\n")
 
-    elif docopt_args["--index"]:
-        try:
-            import config
-        except ImportError:
-            return False
-        else:
-            val = config.PATH + ".json"
-            scan_dir(config.PATH, val)
-
     elif docopt_args["--imdb"]:
-        table_data = [["Title", "Imdb Rating"]]
+        table_data = [["TITLE", "IMDB RATING"]]
         data, table = buttler(table_data)
         for item in data:
             if len(item["Title"]) > table.column_max_width(0):
@@ -105,11 +94,12 @@ def main(docopt_args):
                     item["Title"], table.column_max_width(0))
             table_data.append([item["Title"], item["imdbRating"]])
         table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[1]))
+                                              key=lambda i: i[1],
+                                              reverse=True))
         print_table(table_data)
 
     elif docopt_args["--tomato"]:
-        table_data = [["Title", "Tomato Rating"]]
+        table_data = [["TITLE", "TOMATO RATING"]]
         data, table = buttler(table_data)
         for item in data:
             if len(item["Title"]) > table.column_max_width(0):
@@ -117,11 +107,12 @@ def main(docopt_args):
                     item["Title"], table.column_max_width(0))
             table_data.append([item["Title"], item["tomatoRating"]])
         table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[1]))
+                                              key=lambda i: i[1],
+                                              reverse=True))
         print_table(table_data)
 
     elif docopt_args["--genre"]:
-        table_data = [["Title", "Genre"]]
+        table_data = [["TITLE", "GENRE"]]
         data, table = buttler(table_data)
         for item in data:
             if len(item["Title"]) > table.column_max_width(0):
@@ -133,7 +124,7 @@ def main(docopt_args):
         print_table(table_data)
 
     elif docopt_args["--awards"]:
-        table_data = [["Title", "Awards"]]
+        table_data = [["TITLE", "AWARDS"]]
         data, table = buttler(table_data)
         for item in data:
             if len(item["Title"]) > table.column_max_width(0):
@@ -151,7 +142,7 @@ def main(docopt_args):
         print_table(table_data)
 
     elif docopt_args["--cast"]:
-        table_data = [["Title", "Cast"]]
+        table_data = [["TITLE", "CAST"]]
         data, table = buttler(table_data)
         for item in data:
             if len(item["Title"]) > table.column_max_width(0):
@@ -169,7 +160,7 @@ def main(docopt_args):
         print_table(table_data)
 
     elif docopt_args["--director"]:
-        table_data = [["Title", "Director(s)"]]
+        table_data = [["TITLE", "DIRECTOR(S)"]]
         data, table = buttler(table_data)
         for item in data:
             if len(item["Title"]) > table.column_max_width(0):
@@ -187,7 +178,7 @@ def main(docopt_args):
         print_table(table_data)
 
     elif docopt_args["--year"]:
-        table_data = [["Title", "Release Date"]]
+        table_data = [["TITLE", "RELEASED"]]
         data, table = buttler(table_data)
         for item in data:
             if len(item["Title"]) > table.column_max_width(0):
@@ -199,19 +190,19 @@ def main(docopt_args):
         print_table(table_data)
 
     elif docopt_args["--runtime"]:  # Fix numeric sort
-        table_data = [["Title", "Runtime"]]
+        table_data = [["TITLE", "RUNTIME"]]
         data, table = buttler(table_data)
         for item in data:
             if len(item["Title"]) > table.column_max_width(0):
                 item["Title"] = textwrap.fill(
                     item["Title"], table.column_max_width(0))
             table_data.append([item["Title"], item["Runtime"]])
-        table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[1]))
+        # table_data = (table_data[:1] + sorted(table_data[1:],
+        #                                       key=lambda i: i[1]))
         print_table(table_data)
 
     elif docopt_args["--imdb-rev"]:
-        table_data = [["Title", "IMDB Rating"]]
+        table_data = [["TITLE", "IMDB RATING"]]
         data, table = buttler(table_data)
         for item in data:
             if len(item["Title"]) > table.column_max_width(0):
@@ -219,12 +210,11 @@ def main(docopt_args):
                     item["Title"], table.column_max_width(0))
             table_data.append([item["Title"], item["imdbRating"]])
         table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[1],
-                                              reverse=True))
+                                              key=lambda i: i[1]))
         print_table(table_data)
 
     elif docopt_args["--tomato-rev"]:
-        table_data = [["Title", "Tomato Rating"]]
+        table_data = [["TITLE", "TOMATO RATING"]]
         data, table = buttler(table_data)
         for item in data:
             if len(item["Title"]) > table.column_max_width(0):
@@ -232,14 +222,13 @@ def main(docopt_args):
                     item["Title"], table.column_max_width(0))
             table_data.append([item["Title"], item["tomatoRating"]])
         table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[1],
-                                              reverse=True))
+                                              key=lambda i: i[1]))
         print_table(table_data)
 
     else:
         table_data = [
-            ["Title", "Genre", "Imdb", "Runtime", "Tomato",
-             "Year"]]
+            ["TITLE", "GENRE", "IMDB", "RUNTIME", "TOMATO",
+             "YEAR"]]
         data, table = buttler(table_data)
         for item in data:
             if len(item["Title"]) > table.column_max_width(0):
@@ -263,18 +252,28 @@ def buttler(table_data):
     try:
         import config
     except ImportError:
-        return False
+        print(Fore.YELLOW, "\n\nRun `$moviemon PATH` to "
+              "index your movies directory.\n\n")
+        quit()
     else:
         table = AsciiTable(table_data)
         val = config.PATH + ".json"
-        with open(val) as inp:
-            data = json.load(inp)
-        return data, table
+        try:
+            with open(val) as inp:
+                data = json.load(inp)
+            return data, table
+        except IOError:
+            print(Fore.YELLOW, "\n\nRun `$moviemon PATH` to "
+                  "index your movies directory.\n\n")
+            quit()
 
 
 def print_table(table_data):
     table = AsciiTable(table_data)
     table.inner_row_border = True
+    if table_data[:1] in ([['TITLE', 'IMDB RATING']],
+                          [['TITLE', 'TOMATO RATING']]):
+        table.justify_columns[1] = 'center'
     print("\n")
     print(table.table)
 
@@ -305,7 +304,7 @@ def scan_dir(path, dir_json):
             if data is not None and data['Response'] == 'True':
                 for key, val in data.items():
                     if val == "N/A":
-                        data[key] = "-"  # Should we replace N/A with `-`?
+                        data[key] = "-"  # Should N/A be replaced with `-`?
                 movies.append(data)
             else:
                 if data is not None:

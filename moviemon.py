@@ -88,16 +88,8 @@ def main(docopt_args):
             scan_dir(config.PATH, val)
 
     elif docopt_args["--imdb"]:
-        try:
-            import config
-        except ImportError:
-            return False
-        else:
             table_data = [["Title", "Imdb Rating"]]
-            table = AsciiTable(table_data)
-            val = config.PATH + ".json"
-            with open(val) as inp:
-                data = json.load(inp)
+            data, table = buttler(table_data)
             for item in data:
                 if len(item["Title"]) > table.column_max_width(0):
                     item["Title"] = textwrap.fill(
@@ -105,270 +97,176 @@ def main(docopt_args):
                 table_data.append([item["Title"], item["imdbRating"]])
             table_data = (table_data[:1] + sorted(table_data[1:],
                                                   key=lambda i: i[1]))
-            table = AsciiTable(table_data)
-            table.justify_columns[1] = "center"
-            table.inner_row_border = True
-            print("\n")
-            print(table.table)
+            print_table(table_data)
 
     elif docopt_args["--tomato"]:
-        try:
-            import config
-        except ImportError:
-            return False
-        else:
-            table_data = [["Title", "Tomato Rating"]]
-            table = AsciiTable(table_data)
-            val = config.PATH + ".json"
-            with open(val) as inp:
-                data = json.load(inp)
-            for item in data:
-                if len(item["Title"]) > table.column_max_width(0):
-                    item["Title"] = textwrap.fill(
-                        item["Title"], table.column_max_width(0))
-                table_data.append([item["Title"], item["tomatoRating"]])
-            table_data = (table_data[:1] + sorted(table_data[1:],
-                                                  key=lambda i: i[1]))
-            table = AsciiTable(table_data)
-            table.inner_row_border = True
-            print("\n")
-            print(table.table)
+        table_data = [["Title", "Tomato Rating"]]
+        data, table = buttler(table_data)
+        for item in data:
+            if len(item["Title"]) > table.column_max_width(0):
+                item["Title"] = textwrap.fill(
+                    item["Title"], table.column_max_width(0))
+            table_data.append([item["Title"], item["tomatoRating"]])
+        table_data = (table_data[:1] + sorted(table_data[1:],
+                                              key=lambda i: i[1]))
+        print_table(table_data)
 
     elif docopt_args["--genre"]:
-        try:
-            import config
-        except ImportError:
-            return False
-        else:
-            table_data = [["Title", "Genre"]]
-            table = AsciiTable(table_data)
-            val = config.PATH + ".json"
-            with open(val) as inp:
-                data = json.load(inp)
-            for item in data:
-                if len(item["Title"]) > table.column_max_width(0):
-                    item["Title"] = textwrap.fill(
-                        item["Title"], table.column_max_width(0))
-                table_data.append([item["Title"], item["Genre"]])
-            table_data = (table_data[:1] + sorted(table_data[1:],
-                                                  key=lambda i: i[0]))
-            table = AsciiTable(table_data)
-            table.inner_row_border = True
-            print("\n")
-            print(table.table)
+        table_data = [["Title", "Genre"]]
+        data, table = buttler(table_data)
+        for item in data:
+            if len(item["Title"]) > table.column_max_width(0):
+                item["Title"] = textwrap.fill(
+                    item["Title"], table.column_max_width(0))
+            table_data.append([item["Title"], item["Genre"]])
+        table_data = (table_data[:1] + sorted(table_data[1:],
+                                              key=lambda i: i[0]))
+        print_table(table_data)
 
     elif docopt_args["--awards"]:
-        try:
-            import config
-        except ImportError:
-            return False
-        else:
-            table_data = [["Title", "Awards"]]
-            table = AsciiTable(table_data)
-            val = config.PATH + ".json"
-            with open(val) as inp:
-                data = json.load(inp)
-            for item in data:
-                if len(item["Title"]) > table.column_max_width(0):
-                    item["Title"] = textwrap.fill(
-                        item["Title"], table.column_max_width(0))
-                    if len(item["Awards"]) > table.column_max_width(1):
-                        item["Awards"] = textwrap.fill(
-                            item["Awards"], table.column_max_width(1))
-                elif len(item["Awards"]) > table.column_max_width(1):
+        table_data = [["Title", "Awards"]]
+        data, table = buttler(table_data)
+        for item in data:
+            if len(item["Title"]) > table.column_max_width(0):
+                item["Title"] = textwrap.fill(
+                    item["Title"], table.column_max_width(0))
+                if len(item["Awards"]) > table.column_max_width(1):
                     item["Awards"] = textwrap.fill(
                         item["Awards"], table.column_max_width(1))
-                table_data.append([item["Title"], item["Awards"]])
-            table_data = (table_data[:1] + sorted(table_data[1:],
-                                                  key=lambda i: i[0]))
-            table = AsciiTable(table_data)
-            table.inner_row_border = True
-            print("\n")
-            print(table.table)
+            elif len(item["Awards"]) > table.column_max_width(1):
+                item["Awards"] = textwrap.fill(
+                    item["Awards"], table.column_max_width(1))
+            table_data.append([item["Title"], item["Awards"]])
+        table_data = (table_data[:1] + sorted(table_data[1:],
+                                              key=lambda i: i[0]))
+        print_table(table_data)
 
     elif docopt_args["--cast"]:
-        try:
-            import config
-        except ImportError:
-            return False
-        else:
-            table_data = [["Title", "Cast"]]
-            table = AsciiTable(table_data)
-            val = config.PATH + ".json"
-            with open(val) as inp:
-                data = json.load(inp)
-            for item in data:
-                if len(item["Title"]) > table.column_max_width(0):
-                    item["Title"] = textwrap.fill(
-                        item["Title"], table.column_max_width(0))
-                    if len(item["Actors"]) > table.column_max_width(1):
-                        item["Actors"] = textwrap.fill(
-                            item["Actors"], table.column_max_width(1))
-                elif len(item["Actors"]) > table.column_max_width(1):
+        table_data = [["Title", "Cast"]]
+        data, table = buttler(table_data)
+        for item in data:
+            if len(item["Title"]) > table.column_max_width(0):
+                item["Title"] = textwrap.fill(
+                    item["Title"], table.column_max_width(0))
+                if len(item["Actors"]) > table.column_max_width(1):
                     item["Actors"] = textwrap.fill(
                         item["Actors"], table.column_max_width(1))
-                table_data.append([item["Title"], item["Actors"]])
-            table_data = (table_data[:1] + sorted(table_data[1:],
-                                                  key=lambda i: i[0]))
-            table = AsciiTable(table_data)
-            table.inner_row_border = True
-            print("\n")
-            print(table.table)
+            elif len(item["Actors"]) > table.column_max_width(1):
+                item["Actors"] = textwrap.fill(
+                    item["Actors"], table.column_max_width(1))
+            table_data.append([item["Title"], item["Actors"]])
+        table_data = (table_data[:1] + sorted(table_data[1:],
+                                              key=lambda i: i[0]))
+        print_table(table_data)
 
     elif docopt_args["--director"]:
-        try:
-            import config
-        except ImportError:
-            return False
-        else:
-            table_data = [["Title", "Director(s)"]]
-            table = AsciiTable(table_data)
-            val = config.PATH + ".json"
-            with open(val) as inp:
-                data = json.load(inp)
-            for item in data:
-                if len(item["Title"]) > table.column_max_width(0):
-                    item["Title"] = textwrap.fill(
-                        item["Title"], table.column_max_width(0))
-                    if len(item["Director"]) > table.column_max_width(1):
-                        item["Director"] = textwrap.fill(
-                            item["Director"], table.column_max_width(1))
-                elif len(item["Director"]) > table.column_max_width(1):
+        table_data = [["Title", "Director(s)"]]
+        data, table = buttler(table_data)
+        for item in data:
+            if len(item["Title"]) > table.column_max_width(0):
+                item["Title"] = textwrap.fill(
+                    item["Title"], table.column_max_width(0))
+                if len(item["Director"]) > table.column_max_width(1):
                     item["Director"] = textwrap.fill(
                         item["Director"], table.column_max_width(1))
-                table_data.append([item["Title"], item["Director"]])
-            table_data = (table_data[:1] + sorted(table_data[1:],
-                                                  key=lambda i: i[0]))
-            table = AsciiTable(table_data)
-            table.inner_row_border = True
-            print("\n")
-            print(table.table)
+            elif len(item["Director"]) > table.column_max_width(1):
+                item["Director"] = textwrap.fill(
+                    item["Director"], table.column_max_width(1))
+            table_data.append([item["Title"], item["Director"]])
+        table_data = (table_data[:1] + sorted(table_data[1:],
+                                              key=lambda i: i[0]))
+        print_table(table_data)
 
     elif docopt_args["--year"]:
-        try:
-            import config
-        except ImportError:
-            return False
-        else:
-            table_data = [["Title", "Release Date"]]
-            table = AsciiTable(table_data)
-            val = config.PATH + ".json"
-            with open(val) as inp:
-                data = json.load(inp)
-            for item in data:
-                if len(item["Title"]) > table.column_max_width(0):
-                    item["Title"] = textwrap.fill(
-                        item["Title"], table.column_max_width(0))
-                table_data.append([item["Title"], item["Released"]])
-            table_data = (table_data[:1] + sorted(table_data[1:],
-                                                  key=lambda i: i[0]))
-            table = AsciiTable(table_data)
-            table.inner_row_border = True
-            print("\n")
-            print(table.table)
+        table_data = [["Title", "Release Date"]]
+        data, table = buttler(table_data)
+        for item in data:
+            if len(item["Title"]) > table.column_max_width(0):
+                item["Title"] = textwrap.fill(
+                    item["Title"], table.column_max_width(0))
+            table_data.append([item["Title"], item["Released"]])
+        table_data = (table_data[:1] + sorted(table_data[1:],
+                                              key=lambda i: i[0]))
+        print_table(table_data)
 
     elif docopt_args["--runtime"]:  # Fix numeric sort
-        try:
-            import config
-        except ImportError:
-            return False
-        else:
-            table_data = [["Title", "Runtime"]]
-            table = AsciiTable(table_data)
-            val = config.PATH + ".json"
-            with open(val) as inp:
-                data = json.load(inp)
-            for item in data:
-                if len(item["Title"]) > table.column_max_width(0):
-                    item["Title"] = textwrap.fill(
-                        item["Title"], table.column_max_width(0))
-                table_data.append([item["Title"], item["Runtime"]])
-            table_data = (table_data[:1] + sorted(table_data[1:],
-                                                  key=lambda i: i[1]))
-            table = AsciiTable(table_data)
-            table.inner_row_border = True
-            print("\n")
-            print(table.table)
+        table_data = [["Title", "Runtime"]]
+        data, table = buttler(table_data)
+        for item in data:
+            if len(item["Title"]) > table.column_max_width(0):
+                item["Title"] = textwrap.fill(
+                    item["Title"], table.column_max_width(0))
+            table_data.append([item["Title"], item["Runtime"]])
+        table_data = (table_data[:1] + sorted(table_data[1:],
+                                              key=lambda i: i[1]))
+        print_table(table_data)
 
     elif docopt_args["--imdb-rev"]:
-        try:
-            import config
-        except ImportError:
-            return False
-        else:
-            table_data = [["Title", "IMDB Rating"]]
-            table = AsciiTable(table_data)
-            val = config.PATH + ".json"
-            with open(val) as inp:
-                data = json.load(inp)
-            for item in data:
-                if len(item["Title"]) > table.column_max_width(0):
-                    item["Title"] = textwrap.fill(
-                        item["Title"], table.column_max_width(0))
-                table_data.append([item["Title"], item["imdbRating"]])
-            table_data = (table_data[:1] + sorted(table_data[1:],
-                          key=lambda i: i[1], reverse=True))
-            table = AsciiTable(table_data)
-            table.inner_row_border = True
-            print("\n")
-            print(table.table)
+        table_data = [["Title", "IMDB Rating"]]
+        data, table = buttler(table_data)
+        for item in data:
+            if len(item["Title"]) > table.column_max_width(0):
+                item["Title"] = textwrap.fill(
+                    item["Title"], table.column_max_width(0))
+            table_data.append([item["Title"], item["imdbRating"]])
+        table_data = (table_data[:1] + sorted(table_data[1:],
+                      key=lambda i: i[1], reverse=True))
+        print_table(table_data)
 
     elif docopt_args["--tomato-rev"]:
-        try:
-            import config
-        except ImportError:
-            return False
-        else:
-            table_data = [["Title", "Tomato Rating"]]
-            table = AsciiTable(table_data)
-            val = config.PATH + ".json"
-            with open(val) as inp:
-                data = json.load(inp)
-            for item in data:
-                if len(item["Title"]) > table.column_max_width(0):
-                    item["Title"] = textwrap.fill(
-                        item["Title"], table.column_max_width(0))
-                table_data.append([item["Title"], item["tomatoRating"]])
-            table_data = (table_data[:1] + sorted(table_data[1:],
-                          key=lambda i: i[1], reverse=True))
-            table = AsciiTable(table_data)
-            table.inner_row_border = True
-            print("\n")
-            print(table.table)
+        table_data = [["Title", "Tomato Rating"]]
+        data, table = buttler(table_data)
+        for item in data:
+            if len(item["Title"]) > table.column_max_width(0):
+                item["Title"] = textwrap.fill(
+                    item["Title"], table.column_max_width(0))
+            table_data.append([item["Title"], item["tomatoRating"]])
+        table_data = (table_data[:1] + sorted(table_data[1:],
+                      key=lambda i: i[1], reverse=True))
+        print_table(table_data)
 
     else:
-        try:
-            import config
-        except ImportError:
-            print("Run $moviemon PATH")
-        else:
-            table_data = [
-                ["Title", "Genre", "Imdb", "Runtime", "Tomato",
-                 "Year"]]
-            table = AsciiTable(table_data)
-            val = config.PATH + ".json"
-            with open(val) as inp:
-                data = json.load(inp)
-
-            for item in data:
-                if len(item["Title"]) > table.column_max_width(0):
-                    item["Title"] = textwrap.fill(
-                        item["Title"], table.column_max_width(0))
-                    if len(item["Genre"]) > table.column_max_width(1):
-                        item["Genre"] = textwrap.fill(
-                            item["Genre"], table.column_max_width(1))
-                elif len(item["Genre"]) > table.column_max_width(1):
+        table_data = [
+            ["Title", "Genre", "Imdb", "Runtime", "Tomato",
+             "Year"]]
+        data, table = buttler(table_data)
+        for item in data:
+            if len(item["Title"]) > table.column_max_width(0):
+                item["Title"] = textwrap.fill(
+                    item["Title"], table.column_max_width(0))
+                if len(item["Genre"]) > table.column_max_width(1):
                     item["Genre"] = textwrap.fill(
                         item["Genre"], table.column_max_width(1))
-                table_data.append([item["Title"], item["Genre"],
-                                   item["imdbRating"], item["Runtime"],
-                                   item["tomatoRating"], item["Year"]])
-            table_data = (table_data[:1] + sorted(table_data[1:],
-                                                  key=lambda i: i[0]))
-            table = AsciiTable(table_data)
-            table.inner_row_border = True
-            print("\n")
-            print(table.table)
+            elif len(item["Genre"]) > table.column_max_width(1):
+                item["Genre"] = textwrap.fill(
+                    item["Genre"], table.column_max_width(1))
+            table_data.append([item["Title"], item["Genre"],
+                               item["imdbRating"], item["Runtime"],
+                               item["tomatoRating"], item["Year"]])
+        table_data = (table_data[:1] + sorted(table_data[1:],
+                                              key=lambda i: i[0]))
+        print_table(table_data)
+
+
+def buttler(table_data):
+    try:
+        import config
+    except ImportError:
+        return False
+    else:
+        table = AsciiTable(table_data)
+        val = config.PATH + ".json"
+        with open(val) as inp:
+            data = json.load(inp)
+        return data, table
+
+
+def print_table(table_data):
+    table = AsciiTable(table_data)
+    table.inner_row_border = True
+    print("\n")
+    print(table.table)
+
 
 movies = []
 movie_name = []

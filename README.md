@@ -34,9 +34,9 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
 ### Usage:
 ```sh
   moviemon.py PATH
-  moviemon.py [-i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
-  moviemon.py -h | --help
-  moviemon.py --version
+  moviemon [-i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
+  moviemon -h | --help
+  moviemon --version
 ```
 
 ### Options:
@@ -46,12 +46,12 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
   PATH                  Path to movies dir. to index/reindex all movies.
   -i, --imdb            Sort acc. to IMDB rating.(dec)
   -t, --tomato          Sort acc. to Tomato Rotten rating.(dec)
-  -g, --genre           Show moviename with its genre.
-  -a, --awards          Show moviename with awards recieved.
-  -c, --cast            Show moviename with its cast.
-  -d, --director        Show moviename with director name.
-  -y, --year            Show moviename with its release year.
-  -r, --runtime         Show moviename with its runtime.
+  -g, --genre           Show movie name with its genre.
+  -a, --awards          Show movie name with awards recieved.
+  -c, --cast            Show movie name with its cast.
+  -d, --director        Show movie name with its director(s).
+  -y, --year            Show movie name with its release date.
+  -r, --runtime         Show movie name with its runtime.
   -I, --imdb-rev        Sort acc. to IMDB rating.(inc)
   -T, --tomato-rev      Sort acc. to Tomato Rotten rating.(inc)
 ```
@@ -119,12 +119,10 @@ Display all movies sorted according to their [Tomato Rotten](http://www.rottento
 [**DEMO**]()
 
 
-### TODO
+### Stretch Goals
 
-- [ ] Use numeric sort for sorting runtime, add reverse runtime func.
-- [ ] Package with pip
-- [ ] asciinema
-- [ ] Github page
+* Use MongoDB to store data instead of storing json data in file.
+* Run a cron job to detect if the directory containg movies has been modified, if it has been modified then reindex the directory for accomdating new or deleted movies.
 
 
 ### Shout-out
@@ -134,7 +132,7 @@ Big thanks to [@dufferzafar](https://github.com/dufferzafar) for his [awesome wo
 
 ### Contribute
 
-Found a bug or want to suggest a new feature? Report it by opening issues. Feel free to send a pull request for the same ;)
+Found a bug or want to suggest a new feature? Report it by opening an issue. Feel free to send a pull request for any improvements or feature requests ;)
 
 
 ### License

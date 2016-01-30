@@ -1,10 +1,10 @@
 """moviemon.
 
 Usage:
-  moviemon.py PATH
-  moviemon.py [-i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
-  moviemon.py -h | --help
-  moviemon.py --version
+  moviemon PATH
+  moviemon [-i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
+  moviemon -h | --help
+  moviemon --version
 
 Options:
   -h, --help            Show this screen.

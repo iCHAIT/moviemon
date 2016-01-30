@@ -9,15 +9,15 @@ Usage:
 Options:
   -h, --help            Show this screen.
   --version             Show version.
-  PATH                  Path to movies dir. for indexing/reindexing your movies.
+  PATH                  Path to movies dir. to index/reindex all movies.
   -i, --imdb            Sort acc. to IMDB rating.(dec)
   -t, --tomato          Sort acc. to Tomato Rotten rating.(dec)
-  -g, --genre           Show moviename & its genre.
-  -a, --awards          Show moviename & awards recieved.
-  -c, --cast            Show moviename & its cast.
-  -d, --director        Show moviename & director name.
-  -y, --year            Show moviename & its release year.
-  -r, --runtime         Show moviename & its runtime.
+  -g, --genre           Show movie name with its genre.
+  -a, --awards          Show movie name with awards recieved.
+  -c, --cast            Show movie name with its cast.
+  -d, --director        Show movie name with its director(s).
+  -y, --year            Show movie name with its release date.
+  -r, --runtime         Show movie name with its runtime.
   -I, --imdb-rev        Sort acc. to IMDB rating.(inc)
   -T, --tomato-rev      Sort acc. to Tomato Rotten rating.(inc)
 
@@ -64,17 +64,13 @@ def main(docopt_args):
             scan_dir(docopt_args["PATH"], dir_json)
             if movie_name:
                 if movie_not_found:
-                    print("\n\n")
-                    print(Fore.RED + "Data for the following movie(s)"
-                          " could not be fetched -")
-                    print("\n")
+                    print(Fore.RED + "\n\nData for the following movie(s)"
+                          " could not be fetched -\n")
                     for val in movie_not_found:
                         print(Fore.RED + val)
                 if not_a_movie:
-                    print("\n\n")
-                    print(Fore.RED + "The following media in the"
-                          " folder is not movie type -")
-                    print("\n")
+                    print(Fore.RED + "\n\nThe following media in the"
+                          " folder is not movie type -\n")
                     for val in not_a_movie:
                         print(Fore.RED + val)
                 print(Fore.GREEN + "\n\nRun $moviemon\n\n")
@@ -89,141 +85,94 @@ def main(docopt_args):
         table_data = [["TITLE", "IMDB RATING"]]
         data, table = buttler(table_data)
         for item in data:
-            if len(item["Title"]) > table.column_max_width(0):
-                item["Title"] = textwrap.fill(
-                    item["Title"], table.column_max_width(0))
+            item["Title"] = clean_table(item["Title"], None, item,
+                                        table)
             table_data.append([item["Title"], item["imdbRating"]])
-        table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[1],
-                                              reverse=True))
-        print_table(table_data)
+        sort_table(table_data, 1, True)
 
     elif docopt_args["--tomato"]:
         table_data = [["TITLE", "TOMATO RATING"]]
         data, table = buttler(table_data)
         for item in data:
-            if len(item["Title"]) > table.column_max_width(0):
-                item["Title"] = textwrap.fill(
-                    item["Title"], table.column_max_width(0))
+            item["Title"] = clean_table(item["Title"], None, item,
+                                        table)
             table_data.append([item["Title"], item["tomatoRating"]])
-        table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[1],
-                                              reverse=True))
-        print_table(table_data)
+        sort_table(table_data, 1, True)
 
     elif docopt_args["--genre"]:
         table_data = [["TITLE", "GENRE"]]
         data, table = buttler(table_data)
         for item in data:
-            if len(item["Title"]) > table.column_max_width(0):
-                item["Title"] = textwrap.fill(
-                    item["Title"], table.column_max_width(0))
+            item["Title"] = clean_table(item["Title"], None,
+                                        item, table)
             table_data.append([item["Title"], item["Genre"]])
-        table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[0]))
-        print_table(table_data)
+        sort_table(table_data, 0, False)
 
     elif docopt_args["--awards"]:
         table_data = [["TITLE", "AWARDS"]]
         data, table = buttler(table_data)
         for item in data:
-            if len(item["Title"]) > table.column_max_width(0):
-                item["Title"] = textwrap.fill(
-                    item["Title"], table.column_max_width(0))
-                if len(item["Awards"]) > table.column_max_width(1):
-                    item["Awards"] = textwrap.fill(
-                        item["Awards"], table.column_max_width(1))
-            elif len(item["Awards"]) > table.column_max_width(1):
-                item["Awards"] = textwrap.fill(
-                    item["Awards"], table.column_max_width(1))
+            item["Title"], item["Awards"] = clean_table(item["Title"],
+                                                        item["Awards"], item,
+                                                        table)
             table_data.append([item["Title"], item["Awards"]])
-        table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[0]))
-        print_table(table_data)
+        sort_table(table_data, 0, False)
 
     elif docopt_args["--cast"]:
         table_data = [["TITLE", "CAST"]]
         data, table = buttler(table_data)
         for item in data:
-            if len(item["Title"]) > table.column_max_width(0):
-                item["Title"] = textwrap.fill(
-                    item["Title"], table.column_max_width(0))
-                if len(item["Actors"]) > table.column_max_width(1):
-                    item["Actors"] = textwrap.fill(
-                        item["Actors"], table.column_max_width(1))
-            elif len(item["Actors"]) > table.column_max_width(1):
-                item["Actors"] = textwrap.fill(
-                    item["Actors"], table.column_max_width(1))
+            item["Title"], item["Actors"] = clean_table(item["Title"],
+                                                        item["Actors"], item,
+                                                        table)
             table_data.append([item["Title"], item["Actors"]])
-        table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[0]))
-        print_table(table_data)
+        sort_table(table_data, 0, False)
 
     elif docopt_args["--director"]:
         table_data = [["TITLE", "DIRECTOR(S)"]]
         data, table = buttler(table_data)
         for item in data:
-            if len(item["Title"]) > table.column_max_width(0):
-                item["Title"] = textwrap.fill(
-                    item["Title"], table.column_max_width(0))
-                if len(item["Director"]) > table.column_max_width(1):
-                    item["Director"] = textwrap.fill(
-                        item["Director"], table.column_max_width(1))
-            elif len(item["Director"]) > table.column_max_width(1):
-                item["Director"] = textwrap.fill(
-                    item["Director"], table.column_max_width(1))
+            item["Title"], item["Director"] = clean_table(item["Title"],
+                                                          item["Director"],
+                                                          item, table)
             table_data.append([item["Title"], item["Director"]])
-        table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[0]))
-        print_table(table_data)
+        sort_table(table_data, 0, False)
 
     elif docopt_args["--year"]:
         table_data = [["TITLE", "RELEASED"]]
         data, table = buttler(table_data)
         for item in data:
-            if len(item["Title"]) > table.column_max_width(0):
-                item["Title"] = textwrap.fill(
-                    item["Title"], table.column_max_width(0))
+            item["Title"] = clean_table(item["Title"], None, item,
+                                        table)
             table_data.append([item["Title"], item["Released"]])
-        table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[0]))
-        print_table(table_data)
+        sort_table(table_data, 0, False)
 
-    elif docopt_args["--runtime"]:  # Fix numeric sort
+    elif docopt_args["--runtime"]:  # Sort result by handling numeric sort
         table_data = [["TITLE", "RUNTIME"]]
         data, table = buttler(table_data)
         for item in data:
-            if len(item["Title"]) > table.column_max_width(0):
-                item["Title"] = textwrap.fill(
-                    item["Title"], table.column_max_width(0))
+            item["Title"] = clean_table(item["Title"], None, item,
+                                        table)
             table_data.append([item["Title"], item["Runtime"]])
-        # table_data = (table_data[:1] + sorted(table_data[1:],
-        #                                       key=lambda i: i[1]))
         print_table(table_data)
 
     elif docopt_args["--imdb-rev"]:
         table_data = [["TITLE", "IMDB RATING"]]
         data, table = buttler(table_data)
         for item in data:
-            if len(item["Title"]) > table.column_max_width(0):
-                item["Title"] = textwrap.fill(
-                    item["Title"], table.column_max_width(0))
+            item["Title"] = clean_table(item["Title"], None, item,
+                                        table)
             table_data.append([item["Title"], item["imdbRating"]])
-        table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[1]))
-        print_table(table_data)
+        sort_table(table_data, 1, False)
 
     elif docopt_args["--tomato-rev"]:
         table_data = [["TITLE", "TOMATO RATING"]]
         data, table = buttler(table_data)
         for item in data:
-            if len(item["Title"]) > table.column_max_width(0):
-                item["Title"] = textwrap.fill(
-                    item["Title"], table.column_max_width(0))
+            item["Title"] = clean_table(item["Title"], None, item,
+                                        table)
             table_data.append([item["Title"], item["tomatoRating"]])
-        table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[1]))
-        print_table(table_data)
+        sort_table(table_data, 1, False)
 
     else:
         table_data = [
@@ -231,21 +180,39 @@ def main(docopt_args):
              "YEAR"]]
         data, table = buttler(table_data)
         for item in data:
-            if len(item["Title"]) > table.column_max_width(0):
-                item["Title"] = textwrap.fill(
-                    item["Title"], table.column_max_width(0))
-                if len(item["Genre"]) > table.column_max_width(1):
-                    item["Genre"] = textwrap.fill(
-                        item["Genre"], table.column_max_width(1))
-            elif len(item["Genre"]) > table.column_max_width(1):
-                item["Genre"] = textwrap.fill(
-                    item["Genre"], table.column_max_width(1))
+            item["Title"], item["Genre"] = clean_table(item["Title"],
+                                                       item["Genre"], item,
+                                                       table)
             table_data.append([item["Title"], item["Genre"],
                                item["imdbRating"], item["Runtime"],
                                item["tomatoRating"], item["Year"]])
-        table_data = (table_data[:1] + sorted(table_data[1:],
-                                              key=lambda i: i[0]))
-        print_table(table_data)
+        sort_table(table_data, 0, False)
+
+
+def sort_table(table_data, index, reverse):
+    table_data = (table_data[:1] + sorted(table_data[1:],
+                                          key=lambda i: i[index],
+                                          reverse=reverse))
+    print_table(table_data)
+
+
+def clean_table(tag1, tag2, item, table):
+    if tag1 and tag2:
+        if len(tag1) > table.column_max_width(0):
+            tag1 = textwrap.fill(
+                tag1, table.column_max_width(0))
+            if len(tag2) > table.column_max_width(1):
+                tag2 = textwrap.fill(
+                    tag2, table.column_max_width(1))
+        elif len(tag2) > table.column_max_width(1):
+            tag2 = textwrap.fill(
+                tag2, table.column_max_width(1))
+        return tag1, tag2
+    elif tag1:
+        if len(tag1) > table.column_max_width(0):
+            tag1 = textwrap.fill(
+                tag1, table.column_max_width(0))
+        return tag1
 
 
 def buttler(table_data):
@@ -286,7 +253,6 @@ movie_not_found = []
 
 def scan_dir(path, dir_json):
     # Preprocess the total files count
-    filecounter = 0
     for root, dirs, files in tqdm(os.walk(path)):
         for name in files:
             path = os.path.join(root, name)
@@ -294,9 +260,8 @@ def scan_dir(path, dir_json):
                 ext = os.path.splitext(name)[1]
                 if ext in EXT:
                     movie_name.append(name)
-                    filecounter += 1
 
-    with tqdm(total=filecounter, leave=True, unit='B',
+    with tqdm(total=len(movie_name), leave=True, unit='B',
               unit_scale=True) as pbar:
         for name in movie_name:
             data = get_movie_info(name)

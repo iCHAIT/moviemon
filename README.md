@@ -2,7 +2,7 @@
 
 A Command-Line Python Application to display information about movies on your PC from the CLI.
 
-Scans folders for movies, and fetches their data from the OMDB API and displays it in CLI.
+Scans folders for movies, and fetches their data from the [OMDB API](http://www.omdbapi.com/) and displays it in CLI.
 
 (Bada wala GIF)
 
@@ -34,7 +34,6 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
 ### Usage:
 ```sh
   moviemon.py PATH
-  moviemon.py --index
   moviemon.py [-i | -t | -g | -a | -c | -d | -y | -r | -I | -T ]
   moviemon.py -h | --help
   moviemon.py --version
@@ -43,17 +42,16 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
 ### Options:
 ```sh
   -h, --help            Show this screen.
-  -v, --version         Show version.
-  PATH                  Path to your movies dir.
-  --index               Reindex your movies directory.
+  --version             Show version.
+  PATH                  Path to movies dir. to index/reindex all movies.
   -i, --imdb            Sort acc. to IMDB rating.(dec)
   -t, --tomato          Sort acc. to Tomato Rotten rating.(dec)
-  -g, --genre           Show moviename & its genre.
-  -a, --awards          Show moviename & awards recieved.
-  -c, --cast            Show moviename & its cast.
-  -d, --director        Show moviename & director name.
-  -y, --year            Show moviename & its release year.
-  -r, --runtime         Show moviename & its runtime.
+  -g, --genre           Show moviename with its genre.
+  -a, --awards          Show moviename with awards recieved.
+  -c, --cast            Show moviename with its cast.
+  -d, --director        Show moviename with director name.
+  -y, --year            Show moviename with its release year.
+  -r, --runtime         Show moviename with its runtime.
   -I, --imdb-rev        Sort acc. to IMDB rating.(inc)
   -T, --tomato-rev      Sort acc. to Tomato Rotten rating.(inc)
 ```

@@ -1,11 +1,11 @@
 # moviemon
 
-A Command-Line Python Application to display information about movies on your PC from the CLI.
-
-Scans folders for movies, and fetches their data from the [OMDB API](http://www.omdbapi.com/) and displays it in CLI.
+**A Python Application that displays all the information about all your movies in the command line.**
 
 (Bada wala GIF)
 
+
+## Installation
 
 ### Using [pip](https://pypi.python.org/pypi/pip/)
 
@@ -24,11 +24,11 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
 
 ### Dependencies
 
-* guessit
-* terminaltables
-* docopt
-* tqdm
-* colorama
+* [guessit](https://github.com/guessit-io/guessit)
+* [terminaltables](https://github.com/Robpol86/terminaltables)
+* [docopt](https://github.com/docopt/docopt)
+* [tqdm](https://github.com/tqdm/tqdm)
+* [colorama](https://github.com/tartley/colorama)
 
 
 ### Usage:
@@ -106,13 +106,13 @@ Display all movies with their release date.
 
 [**DEMO**]()
 
-Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings(inc).
+Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings.(inc)
 
 `$ moviemon -I`
 
 [**DEMO**]()
 
-Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings(inc).
+Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings.(inc)
 
 `$ moviemon -T`
 
@@ -123,6 +123,7 @@ Display all movies sorted according to their [Tomato Rotten](http://www.rottento
 
 * Use MongoDB to store data instead of storing json data in file.
 * Run a cron job to detect if the directory containg movies has been modified, if it has been modified then reindex the directory for accomdating new or deleted movies.
+* As mentioned by [@dufferzafar](https://github.com/dufferzafar) this can seriously become a movie database 'tagger' like [Picard](https://picard.musicbrainz.org/).
 
 
 ### Shout-out

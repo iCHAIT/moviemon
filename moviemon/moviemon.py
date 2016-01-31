@@ -53,7 +53,12 @@ EXT = (".3g2 .3gp .3gp2 .3gpp .60d .ajp .asf .asx .avchd .avi .bik .bix"
 EXT = tuple(EXT.split())
 
 
-def main(docopt_args):
+def main():
+    args = docopt(__doc__, version='moviemon 1.0.9')
+    util(args)
+
+
+def util(docopt_args):
     if docopt_args["PATH"]:
         if os.path.isdir(docopt_args["PATH"]):
             print("\n\nIndexing all movies inside ",
@@ -302,8 +307,3 @@ def omdb(title, year):
 
     url = OMDB_URL + urlencode(params)
     return json.loads(requests.get(url).text)
-
-
-if __name__ == '__main__':
-    args = docopt(__doc__, version='moviemon 1.0')
-    main(args)

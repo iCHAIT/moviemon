@@ -62,61 +62,41 @@ Display basic info about all your movies.
 
 `$ moviemon -m`
 
-[**DEMO**]()
-
 Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings.
 
 `$ moviemon -i`
-
-[**DEMO**]()
 
 Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings.
 
 `$ moviemon -t`
 
-[**DEMO**]()
-
 Display all movies with their Genres.
 
 `$ moviemon -g`
-
-[**DEMO**]()
 
 Display all movies with the awards they have recieved.
 
 `$ moviemon -a`
 
-[**DEMO**]()
-
 Display all movies with their cast.
 
 `$ moviemon -c`
-
-[**DEMO**]()
 
 Display all movies with their director(s).
 
 `$ moviemon -d`
 
-[**DEMO**]()
-
 Display all movies with their release date.
 
 `$ moviemon -y`
-
-[**DEMO**]()
 
 Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings.(inc)
 
 `$ moviemon -I`
 
-[**DEMO**]()
-
 Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings.(inc)
 
 `$ moviemon -T`
-
-[**DEMO**]()
 
 
 ### Stretch Goals

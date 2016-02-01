@@ -2,8 +2,7 @@
 
 **A Python Application that displays all the information about all your movies in the command line.**
 
-(Bada wala GIF)
-
+[![asciicast](https://asciinema.org/a/35255.png)](https://asciinema.org/a/35255)
 
 ## Installation
 

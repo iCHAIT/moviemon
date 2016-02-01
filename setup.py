@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='moviemon',
-      version='1.0.9',
+      version='1.0.10',
       description='Everything about your movies within the command line.',
       url='https://github.com/iCHAIT/moviemon',
       author='Chaitanya Gupta',

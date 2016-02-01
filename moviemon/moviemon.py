@@ -57,7 +57,7 @@ CONFIG_PATH = os.path.expanduser("~/.moviemon")
 
 
 def main():
-    args = docopt(__doc__, version='moviemon 1.0.10')
+    args = docopt(__doc__, version='moviemon 1.0.11')
     util(args)
 
 

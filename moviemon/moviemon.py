@@ -316,3 +316,6 @@ def omdb(title, year):
 
     url = OMDB_URL + urlencode(params)
     return json.loads(requests.get(url).text)
+
+if __name__ == '__main__':
+    main()

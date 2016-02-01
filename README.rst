@@ -97,7 +97,7 @@ Display all movies with their Genres.
 
 ``$ moviemon -g``
 
-Display all movies with the awards they have recieved.
+Display all movies with the awards they have received.
 
 ``$ moviemon -a``
 

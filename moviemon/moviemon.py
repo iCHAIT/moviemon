@@ -1,3 +1,4 @@
+
 """moviemon.
 
 Usage:
@@ -52,6 +53,8 @@ EXT = (".3g2 .3gp .3gp2 .3gpp .60d .ajp .asf .asx .avchd .avi .bik .bix"
 
 EXT = tuple(EXT.split())
 
+CONFIG_PATH = os.path.expanduser("~/.moviemon")
+
 
 def main():
     args = docopt(__doc__, version='moviemon 1.0.9')
@@ -61,12 +64,18 @@ def main():
 def util(docopt_args):
     if docopt_args["PATH"]:
         if os.path.isdir(docopt_args["PATH"]):
+
             print("\n\nIndexing all movies inside ",
                   docopt_args["PATH"] + "\n\n")
+
             dir_json = docopt_args["PATH"] + ".json"
-            with open("config.py", "w") as inpath:
-                inpath.write("PATH = \"" + docopt_args["PATH"] + "\" ")
+
+            # Save path to config file so we can read it later
+            with open(CONFIG_PATH, "w") as inpath:
+                inpath.write(docopt_args["PATH"])
+
             scan_dir(docopt_args["PATH"], dir_json)
+
             if movie_name:
                 if movie_not_found:
                     print(Fore.RED + "\n\nData for the following movie(s)"
@@ -222,16 +231,16 @@ def clean_table(tag1, tag2, item, table):
 
 def butler(table_data):
     try:
-        import config
-    except ImportError:
-        print(Fore.YELLOW, "\n\nRun `$moviemon PATH` to "
+        with open(CONFIG_PATH) as config:
+            movie_path = config.read()
+    except IOError:
+        print(Fore.RED, "\n\nRun `$moviemon PATH` to "
               "index your movies directory.\n\n")
         quit()
     else:
         table = AsciiTable(table_data)
-        val = config.PATH + ".json"
         try:
-            with open(val) as inp:
+            with open(movie_path + ".json") as inp:
                 data = json.load(inp)
             return data, table
         except IOError:

@@ -88,7 +88,7 @@ def util(docopt_args):
 
     elif docopt_args["--imdb"]:
         table_data = [["TITLE", "IMDB RATING"]]
-        data, table = buttler(table_data)
+        data, table = butler(table_data)
         for item in data:
             item["Title"] = clean_table(item["Title"], None, item,
                                         table)
@@ -97,7 +97,7 @@ def util(docopt_args):
 
     elif docopt_args["--tomato"]:
         table_data = [["TITLE", "TOMATO RATING"]]
-        data, table = buttler(table_data)
+        data, table = butler(table_data)
         for item in data:
             item["Title"] = clean_table(item["Title"], None, item,
                                         table)
@@ -106,7 +106,7 @@ def util(docopt_args):
 
     elif docopt_args["--genre"]:
         table_data = [["TITLE", "GENRE"]]
-        data, table = buttler(table_data)
+        data, table = butler(table_data)
         for item in data:
             item["Title"] = clean_table(item["Title"], None,
                                         item, table)
@@ -115,7 +115,7 @@ def util(docopt_args):
 
     elif docopt_args["--awards"]:
         table_data = [["TITLE", "AWARDS"]]
-        data, table = buttler(table_data)
+        data, table = butler(table_data)
         for item in data:
             item["Title"], item["Awards"] = clean_table(item["Title"],
                                                         item["Awards"], item,
@@ -125,7 +125,7 @@ def util(docopt_args):
 
     elif docopt_args["--cast"]:
         table_data = [["TITLE", "CAST"]]
-        data, table = buttler(table_data)
+        data, table = butler(table_data)
         for item in data:
             item["Title"], item["Actors"] = clean_table(item["Title"],
                                                         item["Actors"], item,
@@ -135,7 +135,7 @@ def util(docopt_args):
 
     elif docopt_args["--director"]:
         table_data = [["TITLE", "DIRECTOR(S)"]]
-        data, table = buttler(table_data)
+        data, table = butler(table_data)
         for item in data:
             item["Title"], item["Director"] = clean_table(item["Title"],
                                                           item["Director"],
@@ -145,7 +145,7 @@ def util(docopt_args):
 
     elif docopt_args["--year"]:
         table_data = [["TITLE", "RELEASED"]]
-        data, table = buttler(table_data)
+        data, table = butler(table_data)
         for item in data:
             item["Title"] = clean_table(item["Title"], None, item,
                                         table)
@@ -154,7 +154,7 @@ def util(docopt_args):
 
     elif docopt_args["--runtime"]:  # Sort result by handling numeric sort
         table_data = [["TITLE", "RUNTIME"]]
-        data, table = buttler(table_data)
+        data, table = butler(table_data)
         for item in data:
             item["Title"] = clean_table(item["Title"], None, item,
                                         table)
@@ -163,7 +163,7 @@ def util(docopt_args):
 
     elif docopt_args["--imdb-rev"]:
         table_data = [["TITLE", "IMDB RATING"]]
-        data, table = buttler(table_data)
+        data, table = butler(table_data)
         for item in data:
             item["Title"] = clean_table(item["Title"], None, item,
                                         table)
@@ -172,7 +172,7 @@ def util(docopt_args):
 
     elif docopt_args["--tomato-rev"]:
         table_data = [["TITLE", "TOMATO RATING"]]
-        data, table = buttler(table_data)
+        data, table = butler(table_data)
         for item in data:
             item["Title"] = clean_table(item["Title"], None, item,
                                         table)
@@ -183,7 +183,7 @@ def util(docopt_args):
         table_data = [
             ["TITLE", "GENRE", "IMDB", "RUNTIME", "TOMATO",
              "YEAR"]]
-        data, table = buttler(table_data)
+        data, table = butler(table_data)
         for item in data:
             item["Title"], item["Genre"] = clean_table(item["Title"],
                                                        item["Genre"], item,
@@ -220,7 +220,7 @@ def clean_table(tag1, tag2, item, table):
         return tag1
 
 
-def buttler(table_data):
+def butler(table_data):
     try:
         import config
     except ImportError:

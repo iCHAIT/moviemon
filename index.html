@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Moviemon by iCHAIT</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Moviemon</h1>
+        <h2>Everything about your movies within the command line. </h2>
+        <a href="https://github.com/iCHAIT/moviemon" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="moviemon" class="anchor" href="#moviemon" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>moviemon</h1>
+
+<p><strong>A Python Application that displays all the information about all your movies in the command line.</strong></p>
+
+<p><a href="https://asciinema.org/a/35255"><img src="https://asciinema.org/a/35255.png" alt="asciicast"></a></p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<h3>
+<a id="using-pip" class="anchor" href="#using-pip" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using <a href="https://pypi.python.org/pypi/pip/">pip</a>
+</h3>
+
+<p><code>$ pip install moviemon</code></p>
+
+<p>You can also use <a href="https://github.com/mitsuhiko/pipsi">pipsi</a> to install -</p>
+
+<p><code>$ pipsi install moviemon</code></p>
+
+<h3>
+<a id="get-the-latest-build-from-the-source" class="anchor" href="#get-the-latest-build-from-the-source" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Get the latest build from the Source</h3>
+
+<ul>
+<li>Clone the repo git clone <a href="https://github.com/iCHAIT/moviemon">https://github.com/iCHAIT/moviemon</a>
+</li>
+<li>Run python setup.py install</li>
+</ul>
+
+<h3>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h3>
+
+<ul>
+<li><a href="https://github.com/guessit-io/guessit">guessit</a></li>
+<li><a href="https://github.com/Robpol86/terminaltables">terminaltables</a></li>
+<li><a href="https://github.com/docopt/docopt">docopt</a></li>
+<li><a href="https://github.com/tqdm/tqdm">tqdm</a></li>
+<li><a href="https://github.com/tartley/colorama">colorama</a></li>
+</ul>
+
+<h3>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage:</h3>
+
+<div class="highlight highlight-source-shell"><pre>  moviemon.py PATH
+  moviemon [-i <span class="pl-k">|</span> <span class="pl-k">-t</span> <span class="pl-k">|</span> <span class="pl-k">-g</span> <span class="pl-k">|</span> <span class="pl-k">-a</span> <span class="pl-k">|</span> <span class="pl-k">-c</span> <span class="pl-k">|</span> <span class="pl-k">-d</span> <span class="pl-k">|</span> -y <span class="pl-k">|</span> <span class="pl-k">-r</span> <span class="pl-k">|</span> -I <span class="pl-k">|</span> -T ]
+  moviemon -h <span class="pl-k">|</span> --help
+  moviemon --version</pre></div>
+
+<h3>
+<a id="options" class="anchor" href="#options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options:</h3>
+
+<div class="highlight highlight-source-shell"><pre>  -h, --help            Show this screen.
+  --version             Show version.
+  PATH                  Path to movies dir. to index/reindex all movies.
+  -i, --imdb            Sort acc. to IMDB rating.(dec)
+  -t, --tomato          Sort acc. to Tomato Rotten rating.(dec)
+  -g, --genre           Show movie name with its genre.
+  -a, --awards          Show movie name with awards recieved.
+  -c, --cast            Show movie name with its cast.
+  -d, --director        Show movie name with its director(s).
+  -y, --year            Show movie name with its release date.
+  -r, --runtime         Show movie name with its runtime.
+  -I, --imdb-rev        Sort acc. to IMDB rating.(inc)
+  -T, --tomato-rev      Sort acc. to Tomato Rotten rating.(inc)</pre></div>
+
+<h3>
+<a id="examples--" class="anchor" href="#examples--" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples -</h3>
+
+<p>Display basic info about all your movies.</p>
+
+<p><code>$ moviemon -m</code></p>
+
+<p>Display all movies sorted according to their <a href="http://www.imdb.com/">IMDB</a> ratings.</p>
+
+<p><code>$ moviemon -i</code></p>
+
+<p>Display all movies sorted according to their <a href="http://www.rottentomatoes.com/">Tomato Rotten</a> ratings.</p>
+
+<p><code>$ moviemon -t</code></p>
+
+<p>Display all movies with their Genres.</p>
+
+<p><code>$ moviemon -g</code></p>
+
+<p>Display all movies with the awards they have recieved.</p>
+
+<p><code>$ moviemon -a</code></p>
+
+<p>Display all movies with their cast.</p>
+
+<p><code>$ moviemon -c</code></p>
+
+<p>Display all movies with their director(s).</p>
+
+<p><code>$ moviemon -d</code></p>
+
+<p>Display all movies with their release date.</p>
+
+<p><code>$ moviemon -y</code></p>
+
+<p>Display all movies sorted according to their <a href="http://www.imdb.com/">IMDB</a> ratings.(inc)</p>
+
+<p><code>$ moviemon -I</code></p>
+
+<p>Display all movies sorted according to their <a href="http://www.rottentomatoes.com/">Tomato Rotten</a> ratings.(inc)</p>
+
+<p><code>$ moviemon -T</code></p>
+
+<h3>
+<a id="stretch-goals" class="anchor" href="#stretch-goals" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Stretch Goals</h3>
+
+<ul>
+<li>Use MongoDB to store data instead of storing json data in file.</li>
+<li>Run a cron job to detect if the directory containg movies has been modified, if it has been modified then reindex the directory for accomdating new or deleted movies.</li>
+<li>As mentioned by <a href="https://github.com/dufferzafar">@dufferzafar</a> this can seriously become a movie database 'tagger' like <a href="https://picard.musicbrainz.org/">Picard</a>.</li>
+</ul>
+
+<h3>
+<a id="shout-out" class="anchor" href="#shout-out" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Shout-out</h3>
+
+<p>Big thanks to <a href="https://github.com/dufferzafar">@dufferzafar</a> for his <a href="https://github.com/dufferzafar/what-to-watch">awesome work</a>.</p>
+
+<h3>
+<a id="contribute" class="anchor" href="#contribute" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contribute</h3>
+
+<p>Found a bug or want to suggest a new feature? Report it by opening an issue. Feel free to send a pull request for any improvements or feature requests ;)</p>
+
+<h3>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h3>
+
+<p>MIT © <a href="https://github.com/iCHAIT">Chaitanya Gupta</a></p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/iCHAIT/moviemon/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/iCHAIT/moviemon/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/iCHAIT/moviemon"></a> is maintained by <a href="https://github.com/iCHAIT">iCHAIT</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>

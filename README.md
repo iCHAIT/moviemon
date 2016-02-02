@@ -2,7 +2,12 @@
 
 **A Python Application that displays all the information about all your movies in the command line.**
 
-[![asciicast](https://asciinema.org/a/35255.png)](https://asciinema.org/a/35255)
+
+![ScreenShot](/img/moviemon.png)
+
+
+## [Live Demo](https://asciinema.org/a/35255)
+
 
 ## Installation
 
@@ -46,7 +51,7 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
   -i, --imdb            Sort acc. to IMDB rating.(dec)
   -t, --tomato          Sort acc. to Tomato Rotten rating.(dec)
   -g, --genre           Show movie name with its genre.
-  -a, --awards          Show movie name with awards recieved.
+  -a, --awards          Show movie name with awards received.
   -c, --cast            Show movie name with its cast.
   -d, --director        Show movie name with its director(s).
   -y, --year            Show movie name with its release date.
@@ -57,51 +62,109 @@ You can also use [pipsi](https://github.com/mitsuhiko/pipsi) to install -
 
 ### Examples -
 
-Display basic info about all your movies.
+#### Display basic info about all your movies.
 
-`$ moviemon -m`
 
-Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings.
+`$ moviemon`
+
+
+![ScreenShot](/img/moviemon.png)
+
+
+#### Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings.
+
 
 `$ moviemon -i`
 
-Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings.
+
+![ScreenShot](/img/imdb-dec.png)
+
+
+#### Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings.
+
 
 `$ moviemon -t`
 
-Display all movies with their Genres.
+
+![ScreenShot](/img/tomato-dec.png)
+
+
+**Display all movies with their Genres.**
+
 
 `$ moviemon -g`
 
-Display all movies with the awards they have received.
+
+![ScreenShot](/img/genre.png)
+
+
+#### Display all movies with the awards they have received.
+
 
 `$ moviemon -a`
 
-Display all movies with their cast.
+
+![ScreenShot](/img/awards.png)
+
+
+#### Display all movies with their cast.
+
 
 `$ moviemon -c`
 
-Display all movies with their director(s).
+
+![ScreenShot](/img/cast.png)
+
+
+#### Display all movies with their director(s).
+
 
 `$ moviemon -d`
 
-Display all movies with their release date.
+
+![ScreenShot](/img/directors.png)
+
+
+#### Display all movies with their release date.
+
 
 `$ moviemon -y`
 
-Display all movies sorted according to their [IMDB](http://www.imdb.com/) ratings.(inc)
+
+![ScreenShot](/img/released.png)
+
+
+#### Display all movies with their runtime.
+
+
+`$ moviemon -r`
+
+
+![ScreenShot](/img/runtime.png)
+
+
+#### Display all movies sorted according to their IMDB ratings.(inc)
+
 
 `$ moviemon -I`
 
-Display all movies sorted according to their [Tomato Rotten](http://www.rottentomatoes.com/) ratings.(inc)
+
+![ScreenShot](/img/imdb-inc.png)
+
+
+#### Display all movies sorted according to their Tomato Rotten ratings.(inc)
+
 
 `$ moviemon -T`
+
+
+![ScreenShot](/img/imdb-inc.png)
 
 
 ### Stretch Goals
 
 * Use MongoDB to store data instead of storing json data in file.
-* Run a cron job to detect if the directory containg movies has been modified, if it has been modified then reindex the directory for accomdating new or deleted movies.
+* Run a cron job to detect if the directory containing movies has been modified, if it has been modified then reindex the directory for accommodating new or deleted movies.
 * As mentioned by [@dufferzafar](https://github.com/dufferzafar) this can seriously become a movie database 'tagger' like [Picard](https://picard.musicbrainz.org/).
 
 

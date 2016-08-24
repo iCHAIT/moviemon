@@ -2,8 +2,6 @@
 
 **A Python Application that displays all the information about all your movies in the command line.**
 
-**WARNING; It seems like the auther of moviemon doesn't really update the code very often so this repo will be updated by me more often to eliminate bugs and to add features. Thanks to the ICHAIT for base of this program!**
-
 ![ScreenShot](/img/moviemon.png)
 
 

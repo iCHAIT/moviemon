@@ -29,7 +29,7 @@ import os
 import textwrap
 import requests
 import json
-from guessit import guess_file_info
+from guessit import guessit
 from terminaltables import AsciiTable
 try:
     from urllib.parse import urlencode
@@ -294,7 +294,7 @@ def scan_dir(path, dir_json):
 
 def get_movie_info(name):
     """Find movie information"""
-    movie_info = guess_file_info(name)
+    movie_info = guessit(name)
     if movie_info['type'] == "movie":
         if 'year' in movie_info:
             return omdb(movie_info['title'], movie_info['year'])

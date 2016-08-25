@@ -2,7 +2,6 @@
 
 **A Python Application that displays all the information about all your movies in the command line.**
 
-
 ![ScreenShot](/img/moviemon.png)
 
 

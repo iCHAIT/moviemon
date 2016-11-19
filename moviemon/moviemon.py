@@ -315,7 +315,10 @@ def omdb(title, year):
         params['y'] = year
 
     url = OMDB_URL + urlencode(params)
-    r = requests.get(url)
+    try:
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        r.status_code = "Connection refused"
     if r.status_code == 200:
         if "application/json" in r.headers['content-type']:
             return json.loads(r.text)

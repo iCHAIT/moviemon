@@ -315,7 +315,19 @@ def omdb(title, year):
         params['y'] = year
 
     url = OMDB_URL + urlencode(params)
-    return json.loads(requests.get(url).text)
+    try:
+        r = requests.get(url)
+    except requests.exceptions.ConnectionError:
+        r.status_code = "Connection refused"
+    if r.status_code == 200:
+        if "application/json" in r.headers['content-type']:
+            return json.loads(r.text)
+        else:
+            print("Couldn't find the movie " + title)
+            return None
+    else:
+        print("There was some error fetching info from " + url)
+        return None
 
 if __name__ == '__main__':
     main()
